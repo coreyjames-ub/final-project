@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'Star Wars';
+    src: url(assets/starjedi/Starjedi.ttf);
+}
+@font-face {
+    font-family: 'Star Wars hallow';
+    src: url(assets/SfDistantGalaxyOutline-xoeO.ttf);
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+    background-image: url(assets/starBackGround.jpeg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#titleArea{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    border: solid purple;
+    align-items: center;
+}
+
+#starWars{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    align-items: center;
+    align-content: center;
+}
+
+h1{
+    color: goldenrod;
+    font-family: Star Wars;
+    text-align: center;
+    border: solid green;
+    height: fit-content;
+    width: fit-content;
+}
+
+h2{
+    text-align: center;
+    color: white;
+    font-family: Lora;
+    letter-spacing: 10px;
+}
+
+h3{
+    color: goldenrod;
+    font-family: Star Wars hallow;
+    text-align: center;
+    border: solid green;
+    height: fit-content;
+    width: fit-content;
+}
