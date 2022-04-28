@@ -19,11 +19,13 @@ enterSection.addEventListener('click', function () {
     productionArea.style.flexDirection = 'column'
     productionArea.style.alignItems = 'center'
     foxIntro.play();
-})
+    setTimeout(function(){
+        myFadeOut(productionArea)
+    },20500);
+});
 
 
 // HELPER FUNCTION
-
 let myFadeIn = (dom) => {
     let opacity = 0;
     dom.style.opacity = 0;
@@ -34,4 +36,16 @@ let myFadeIn = (dom) => {
         dom.style.opacity = opacity;
         opacity += opacity + 0.1;
     }, 50)
-}
+};
+
+let myFadeOut = (dom) => {
+    let opacity = 1;
+    dom.style.opacity = 1;
+    let myTimer = setInterval(function(){
+        if (opacity <= 0){
+            clearInterval(myTimer);
+        }
+        dom.style.opacity = opacity;
+        opacity = opacity - 0.1;
+    }, 50)
+};
