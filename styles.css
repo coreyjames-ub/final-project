@@ -15,6 +15,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 #titleArea{
@@ -32,7 +33,39 @@ body{
     width: 95%;
     align-items: center;
     justify-content: center;
-    border: solid green;
+}
+
+#trailerArea{
+    display: none;
+    border: solid rgba(0, 0, 0, 0.1);
+    /* width: 56vw; */
+}
+
+#hollowStarWars{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: auto;
+    align-items: center;
+    align-content: center;
+    font-size:16vw;
+    color: #daa520;
+    font-family: Star Wars hallow;
+    line-height: .75;
+    text-indent: 4%;
+    margin: 1.5%;
+    padding: 0;
+}
+
+#longTimeArea{
+    display: none;
+    opacity: 0;
+}
+#longTimeText{
+    font-family: Arial, Helvetica, sans-serif;
+    color: skyblue;
+    font-size: 6vw;
+    font-weight: bold;
 }
 
 #productionArea{
@@ -73,7 +106,7 @@ body{
 #tagLine{
     color: white;
     font-family: Lora;
-    font-size: 9vw;
+    font-size: 5vw;
     letter-spacing: 1vw;
     margin: 0;
     padding: 0;
@@ -83,7 +116,7 @@ body{
     color: goldenrod;
     font-family: Star Wars hallow;
     font-size: 10vw;
-    margin-top: 4%;
+    margin-top: 3%;
     background-color: black;
     
 }
