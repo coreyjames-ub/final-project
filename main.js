@@ -10,6 +10,7 @@ let productionArea = document.querySelector('#productionArea');
 let longTimeArea = document.querySelector('#longTimeArea');
 let trailerArea = document.querySelector('#trailerArea');
 let hollowStarWars = document.querySelector('#hollowStarWars');
+let continueButton = document.querySelector('#continueButton')
 
 // EVENT LISTENERS
 enterSection.addEventListener('click', function () {
@@ -25,19 +26,32 @@ enterSection.addEventListener('click', function () {
     setTimeout(function () {
         myFadeIn(longTimeArea);
     }, 22000)
-    setTimeout(function () {
-        myFadeOut(longTimeArea);
-    }, 29000)
-    setTimeout(function () {
-        starWarsTheme.play();
-        trailerArea.addEventListener('click', function(){
-            starWarsTheme.play();
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        setTimeout(function () {
+            myFadeIn(continueButton);
+        }, 29000)
+        continueButton.addEventListener('click', function(){
+            myFadeOut(longTimeArea);
         })
-        trailerArea.style.display = 'flex'
-        trailerArea.style.alignItems = 'center'
-        trailerArea.style.justifyContent = 'center'
-        myShrinkText(hollowStarWars);
-    }, 30000)
+        setTimeout(function () {
+            starWarsTheme.play();
+            trailerArea.style.display = 'flex'
+            trailerArea.style.alignItems = 'center'
+            trailerArea.style.justifyContent = 'center'
+            myShrinkText(hollowStarWars);
+        }, 2000)
+    } else {
+        setTimeout(function () {
+            myFadeOut(longTimeArea);
+        }, 29000)
+        setTimeout(function () {
+            starWarsTheme.play();
+            trailerArea.style.display = 'flex'
+            trailerArea.style.alignItems = 'center'
+            trailerArea.style.justifyContent = 'center'
+            myShrinkText(hollowStarWars);
+        }, 30000)
+    }
 
 });
 
