@@ -9,49 +9,51 @@ let introArea = document.querySelector('#introArea');
 let productionArea = document.querySelector('#productionArea');
 let longTimeArea = document.querySelector('#longTimeArea');
 let trailerArea = document.querySelector('#trailerArea');
-let hollowStarWars = document.querySelector('#hollowStarWars');
+let hollowStarWarsText = document.querySelector('#hollowStarWarsText');
 let continueButton = document.querySelector('#continueButton')
 
 // EVENT LISTENERS
 enterSection.addEventListener('click', function () {
     titleArea.style.display = 'none';
     introArea.style.display = 'flex';
-    setTimeout(function () {
-        myFadeIn(productionArea);
-    }, 1500);
-    foxIntro.play();
-    setTimeout(function () {
-        myFadeOut(productionArea)
-    }, 20500);
-    setTimeout(function () {
-        myFadeIn(longTimeArea);
-    }, 22000)
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        setTimeout(function () {
-            myFadeIn(continueButton);
-        }, 29000)
-        continueButton.addEventListener('click', function () {
-            starWarsTheme.play();
-            myFadeOut(longTimeArea);
-            setTimeout(function () {
-                trailerArea.style.display = 'flex'
-                trailerArea.style.alignItems = 'center'
-                trailerArea.style.justifyContent = 'center'
-                myShrinkText(hollowStarWars);
-            }, 2000);
-        });
-    } else {
-        setTimeout(function () {
-            myFadeOut(longTimeArea);
-        }, 29000)
-        setTimeout(function () {
-            starWarsTheme.play();
+    // setTimeout(function () {
+    //     myFadeIn(productionArea);
+    // }, 1500);
+    // foxIntro.play();
+    // setTimeout(function () {
+    //     myFadeOut(productionArea)
+    // }, 20500);
+    // setTimeout(function () {
+    //     myFadeIn(longTimeArea);
+    // }, 22000)
+    // if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    //     setTimeout(function () {
+    //         myFadeIn(continueButton);
+    //     }, 29000)
+    //     continueButton.addEventListener('click', function () {
+    //         starWarsTheme.play();
+    //         myFadeOut(longTimeArea);
+    //         setTimeout(function () {
+    //             trailerArea.style.display = 'flex'
+    //             trailerArea.style.alignItems = 'center'
+    //             trailerArea.style.justifyContent = 'center'
+    //             myShrinkText(hollowStarWars);
+    //         }, 2000);
+    //     });
+    // } else {
+    //     setTimeout(function () {
+    //         myFadeOut(longTimeArea);
+    //     }, 29000)
+    //     setTimeout(function () {
+    //         starWarsTheme.play();
             trailerArea.style.display = 'flex'
+            trailerArea.style.flexDirection = 'column'
             trailerArea.style.alignItems = 'center'
             trailerArea.style.justifyContent = 'center'
-            myShrinkText(hollowStarWars);
-        }, 30000)
-    }
+            trailerArea.style.alignContent = 'flex-end'
+            myShrinkText(hollowStarWarsText);
+    //     }, 30000)
+    // }
 
 });
 

@@ -1,159 +1,209 @@
 @font-face {
-    font-family: 'Star Wars';
-    src: url(assets/starjedi/Starjedi.ttf);
+  font-family: "Star Wars";
+  src: url(assets/starjedi/Starjedi.ttf);
 }
 @font-face {
-    font-family: 'Star Wars hallow';
-    src: url(assets/SfDistantGalaxyOutline-xoeO.ttf);
+  font-family: "Star Wars hallow";
+  src: url(assets/SfDistantGalaxyOutline-xoeO.ttf);
 }
 
-body{
-    height: 100vh;
-    width: 100vw;
-    background-image: url(assets/starBackGround.jpeg);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+body {
+  height: 100vh;
+  width: 100vw;
+  background-image: url(assets/starBackGround.jpeg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-#titleArea{
-    display: flex;
-    flex-direction: column;
-    height: 90%;
-    width: 95%;
-    align-items: center;
+#titleArea {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  width: 95%;
+  align-items: center;
 }
 
-#introArea{
-    display: none;
-    flex-direction: column;
-    height: 90%;
-    width: 95%;
-    align-items: center;
-    justify-content: center;
+#introArea {
+  display: none;
+  flex-direction: column;
+  height: 90%;
+  width: 95%;
+  align-items: center;
+  justify-content: center;
 }
 
-#trailerArea{
-    display: none;
-    border: solid rgba(0, 0, 0, 0.1);
-    /* width: 56vw; */
+#trailerArea {
+  display: none;
+  border: solid rgba(0, 0, 0, 0.1);
+  /* width: 56vw; */
 }
 
-#hollowStarWars{
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    width: auto;
-    align-items: center;
-    align-content: center;
-    font-size:16vw;
-    color: #daa520;
-    font-family: Star Wars hallow;
-    line-height: .75;
-    text-indent: 4%;
-    margin: 1.5%;
-    padding: 0;
+#crawlArea {
+  transform: perspective(300px) rotateX(25deg);
+  transform-origin: 50% 100%;
+  text-align: justify;
+  position: absolute;
+  margin-left: -9em;
+  font-weight: bold;
+  overflow: hidden;
+  font-size: 350%;
+  height: 50em;
+  width: 18em;
+  bottom: 0;
+  left: 50%;
 }
 
-#continueButton{
-    text-align: center;
-    font-family: Star Wars;
-    color: white;
-    font-size: 1.3em;
-    background-color: goldenrod;
-    border-radius: 25px;
-    width: 200px;
-    cursor: pointer; 
-    display: none; 
+#crawlArea:after {
+  position: absolute;
+  content: " ";
+  bottom: 60%;
+  left: 0;
+  right: 0;
+  top: 0;
 }
 
-#continueButton:hover{
-    box-shadow: 0 12px 16px 0 skyblue,0 17px 50px 0 skyblue;
+#crawlText {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #daa520;
+  font-size: 6vw;
+  font-weight: bold;
+  animation: scroll 100s linear 16s;
+  position: absolute;
+  top: 100%;
+  text-align: center;
 }
 
-#longTimeArea{
-    display: none;
-    opacity: 0;
-}
-#longTimeText{
-    font-family: Arial, Helvetica, sans-serif;
-    color: skyblue;
-    font-size: 6vw;
-    font-weight: bold;
+@keyframes scroll {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: -170%;
+  }
 }
 
-#productionArea{
-    display: none;
-    opacity: 0;
+#hollowStarWarsArea {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  align-content: center;
 }
 
-.productionArticle{
-    font-family: Arial, Helvetica, sans-serif;
-    color: green;
-    font-size: 7vw;
-    font-weight: bold;
-}
-#coreyApp{
-    font-family: Arial, Helvetica, sans-serif;
-    color: green;
-    font-size: 9vw;
-    font-weight: bolder;
-}
-
-#starWars{
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    width: auto;
-    align-items: center;
-    align-content: center;
-    font-size: 16vw;
-    color: goldenrod;
-    font-family: Star Wars;
-    line-height: .75;
-    text-indent: 2vw;
-    margin: 1.5%;
-    padding: 0;
-
+#hollowStarWarsText {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: auto;
+  align-items: center;
+  align-content: center;
+  font-size: 16vw;
+  color: #daa520;
+  font-family: Star Wars hallow;
+  line-height: 0.75;
+  text-indent: 4%;
+  margin: 1.5%;
+  padding: 0;
 }
 
-#tagLine{
-    color: white;
-    font-family: Lora;
-    font-size: 5vw;
-    letter-spacing: 1vw;
-    margin: 0;
-    padding: 0;
+#continueButton {
+  text-align: center;
+  font-family: Star Wars;
+  color: white;
+  font-size: 1.3em;
+  background-color: goldenrod;
+  border-radius: 25px;
+  width: 200px;
+  cursor: pointer;
+  display: none;
 }
 
-#enter{
-    color: goldenrod;
-    font-family: Star Wars hallow;
-    font-size: 10vw;
-    margin-top: 3%;
-    background-color: black;
-    
+#continueButton:hover {
+  box-shadow: 0 12px 16px 0 skyblue, 0 17px 50px 0 skyblue;
 }
 
-#enter:hover{
-    box-shadow: 0 12px 16px 0 skyblue,0 17px 50px 0 skyblue,-17px 0px 50px 0 skyblue, 0px -17px 50px 0 skyblue;
-    background-color: rgba(0, 0, 0, 0.3);
-    cursor: pointer;
+#longTimeArea {
+  display: none;
+  opacity: 0;
+}
+#longTimeText {
+  font-family: Arial, Helvetica, sans-serif;
+  color: skyblue;
+  font-size: 6vw;
+  font-weight: bold;
+}
+
+#productionArea {
+  display: none;
+  opacity: 0;
+}
+
+.productionArticle {
+  font-family: Arial, Helvetica, sans-serif;
+  color: green;
+  font-size: 7vw;
+  font-weight: bold;
+}
+#coreyApp {
+  font-family: Arial, Helvetica, sans-serif;
+  color: green;
+  font-size: 9vw;
+  font-weight: bolder;
+}
+
+#starWars {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: auto;
+  align-items: center;
+  align-content: center;
+  font-size: 16vw;
+  color: goldenrod;
+  font-family: Star Wars;
+  line-height: 0.75;
+  text-indent: 2vw;
+  margin: 1.5%;
+  padding: 0;
+}
+
+#tagLine {
+  color: white;
+  font-family: Lora;
+  font-size: 5vw;
+  letter-spacing: 1vw;
+  margin: 0;
+  padding: 0;
+}
+
+#enter {
+  color: goldenrod;
+  font-family: Star Wars hallow;
+  font-size: 10vw;
+  margin-top: 3%;
+  background-color: black;
+}
+
+#enter:hover {
+  box-shadow: 0 12px 16px 0 skyblue, 0 17px 50px 0 skyblue,
+    -17px 0px 50px 0 skyblue, 0px -17px 50px 0 skyblue;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 @media screen and (max-width: 950px) {
+  #continueButton {
+    margin-top: 30%;
+  }
 
-    #continueButton{
-        margin-top: 30%;
-    }
+  #enter {
+    margin-top: 30%;
+  }
 
-    #enter{
-        margin-top: 30%;
-    }
-
-    #titleArea{
-        margin-top: 50%;
-    }
+  #titleArea {
+    margin-top: 50%;
+  }
 }
