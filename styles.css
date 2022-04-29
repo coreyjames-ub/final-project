@@ -144,6 +144,11 @@ body{
 }
 
 @media screen and (max-width: 950px) {
+
+    #continueButton{
+        margin-top: 30%;
+    }
+
     #enter{
         margin-top: 30%;
     }
