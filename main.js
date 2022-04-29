@@ -10,7 +10,9 @@ let productionArea = document.querySelector('#productionArea');
 let longTimeArea = document.querySelector('#longTimeArea');
 let trailerArea = document.querySelector('#trailerArea');
 let hollowStarWarsText = document.querySelector('#hollowStarWarsText');
-let continueButton = document.querySelector('#continueButton')
+let continueButton = document.querySelector('#continueButton');
+let crawlArea = document.querySelector('#crawlArea');
+let playButton = document.querySelector('#playButton');
 
 // EVENT LISTENERS
 enterSection.addEventListener('click', function () {
@@ -45,15 +47,21 @@ enterSection.addEventListener('click', function () {
     //         myFadeOut(longTimeArea);
     //     }, 29000)
     //     setTimeout(function () {
-    //         starWarsTheme.play();
-            trailerArea.style.display = 'flex'
-            trailerArea.style.flexDirection = 'column'
-            trailerArea.style.alignItems = 'center'
-            trailerArea.style.justifyContent = 'center'
-            trailerArea.style.alignContent = 'flex-end'
-            myShrinkText(hollowStarWarsText);
+            starWarsTheme.play();
+    trailerArea.style.display = 'flex'
+    trailerArea.style.flexDirection = 'column'
+    trailerArea.style.alignItems = 'center'
+    trailerArea.style.justifyContent = 'center'
+    trailerArea.style.alignContent = 'flex-end'
+    myShrinkText(hollowStarWarsText);
     //     }, 30000)
     // }
+    setTimeout(function(){
+        myFadeOut(crawlArea);
+    }, 77000);
+    setTimeout(function(){
+        myFadeIn(playButton);
+    }, 78000);
 
 });
 
@@ -89,6 +97,11 @@ let myFadeOut = (dom) => {
 };
 
 let myShrinkText = (dom) => {
+    dom.style.display = 'flex';
+    dom.style.flexDirection = 'column';
+    dom.style.alignItems = 'center';
+    dom.style.alignContent = 'center';
+
     let fontSize = 16;
     let opacity = 1;
     let myTimer = setInterval(function () {
@@ -98,7 +111,7 @@ let myShrinkText = (dom) => {
         }
         dom.style.fontSize = fontSize + "vw";
         dom.style.opacity = opacity;
-        opacity = opacity - 0.005;
-        fontSize = fontSize - 0.1;
+        opacity = opacity - 0.002;
+        fontSize = fontSize - 0.07;
     }, 50)
 }
