@@ -33,9 +33,7 @@ enterSection.addEventListener('click', function () {
         continueButton.addEventListener('click', function () {
             starWarsTheme.play();
             myFadeOut(longTimeArea);
-            
             setTimeout(function () {
-                
                 trailerArea.style.display = 'flex'
                 trailerArea.style.alignItems = 'center'
                 trailerArea.style.justifyContent = 'center'
