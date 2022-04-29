@@ -1,6 +1,6 @@
 // SET UP SOUNDS
 const foxIntro = new Audio('sounds/fox-intro.mp3');
-
+const starWarsTheme = new Audio('sounds/star-wars-theme.mp3')
 
 // DOM ELEMENTS
 let enterSection = document.querySelector('#enter');
@@ -29,8 +29,10 @@ enterSection.addEventListener('click', function () {
         myFadeOut(longTimeArea);
     }, 29000)
     setTimeout(function () {
-        const starWarsTheme = new Audio('sounds/star-wars-theme.mp3')
         starWarsTheme.play();
+        trailerArea.addEventListener('click', function(){
+            starWarsTheme.play();
+        })
         trailerArea.style.display = 'flex'
         trailerArea.style.alignItems = 'center'
         trailerArea.style.justifyContent = 'center'
