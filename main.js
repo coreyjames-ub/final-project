@@ -30,16 +30,16 @@ enterSection.addEventListener('click', function () {
         setTimeout(function () {
             myFadeIn(continueButton);
         }, 29000)
-        continueButton.addEventListener('click', function(){
+        continueButton.addEventListener('click', function () {
             myFadeOut(longTimeArea);
-        })
-        setTimeout(function () {
-            starWarsTheme.play();
-            trailerArea.style.display = 'flex'
-            trailerArea.style.alignItems = 'center'
-            trailerArea.style.justifyContent = 'center'
-            myShrinkText(hollowStarWars);
-        }, 2000)
+            setTimeout(function () {
+                starWarsTheme.play();
+                trailerArea.style.display = 'flex'
+                trailerArea.style.alignItems = 'center'
+                trailerArea.style.justifyContent = 'center'
+                myShrinkText(hollowStarWars);
+            }, 2000);
+        });
     } else {
         setTimeout(function () {
             myFadeOut(longTimeArea);
