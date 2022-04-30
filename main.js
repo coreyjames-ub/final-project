@@ -58,10 +58,10 @@ enterSection.addEventListener('click', function () {
     }
     setTimeout(function () {
         myFadeOut(crawlArea);
-    }, 110000);
+    }, 114000);
     setTimeout(function () {
         myFadeIn(playText);
-    }, 111000);
+    }, 114000);
 
 });
 
