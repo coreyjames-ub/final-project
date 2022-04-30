@@ -13,11 +13,46 @@ let hollowStarWarsText = document.querySelector('#hollowStarWarsText');
 let continueButton = document.querySelector('#continueButton');
 let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
+let gameArea = document.querySelector('#gameArea');
+let galacticDefender = document.querySelector('#galacticDefender');
+let tieFighter = document.querySelector('.tieFighter')
+
+// GAME VARIABLES
+// Size of the game area (in viewport)
+const GAME_AREA_WIDTH = 95;
+const GAME_AREA_HEIGHT = 95;
+
+// Size of the paddles (in viewport)
+const PADDLE_HEIGHT = 100;
+const PADDLE_WIDTH = 20;
+
+// The x-velocity and x-position of the Galactic Defender
+let galacticDefenderXPosition;
+let galacticDefenderXVelocity;
+
+// The Y Position and Velocity of the User Paddle
+let tieFighterXPosition;
+let tieFighterXVelocity;
+
+
 
 // EVENT LISTENERS
+
+//DEV MODE
+// enterSection.addEventListener('click', function () {
+//     myFadeOut(titleArea);
+//     setTimeout(function(){
+//         myFadeIn(introArea);
+//         trailerArea.style.display = 'flex'
+//         playText.style.display = 'flex'
+//     }, 1000)
+// }); 
+
 enterSection.addEventListener('click', function () {
-    titleArea.style.display = 'none';
-    introArea.style.display = 'flex';
+    myFadeOut(titleArea);
+    setTimeout(function(){
+        myFadeIn(introArea);
+    }, 1000)
     setTimeout(function () {
         myFadeIn(productionArea);
     }, 1500);
@@ -62,8 +97,41 @@ enterSection.addEventListener('click', function () {
     }
 });
 
+playText.addEventListener('click', function(){
+  myFadeOut(introArea);
+  setTimeout(function(){
+    myFadeIn(gameArea); 
+    startGame();
+    window.addEventListener("keydown", userArrow);
+  }, 1000);
+      
+})
 
-// HELPER FUNCTION
+// HELPER FUNCTIONS
+let userArrow = (event) => {
+    if (event.key === 'ArrowLeft'){
+        if (galacticDefenderXPosition >= 1){
+            galacticDefenderXVelocity = -1;
+            galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
+            galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+        }
+    } else if (event.key === 'ArrowRight'){
+        if (galacticDefenderXPosition <= 89){
+            galacticDefenderXVelocity = 1;
+            galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
+            galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+
+        }
+    }
+}
+
+let startGame = () => {
+
+    // The x position of Galactic Defender
+    galacticDefenderXPosition = 0;
+    galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+}
+
 let playIntroCrawl = () => {
     trailerArea.style.display = 'flex'
     trailerArea.style.flexDirection = 'column'

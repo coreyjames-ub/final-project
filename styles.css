@@ -18,6 +18,29 @@ body {
   overflow: hidden;
 }
 
+img {
+  height: 10vh;
+  width: auto;
+}
+
+#galacticDefender{
+    position: absolute;
+    top: 85vh;
+}
+
+.tieFighter{
+    position: absolute;
+    top: 0vh;
+}
+
+#gameArea {
+  display: none;
+  /* border: solid skyblue 4px; */
+  height: 95vh;
+  width: 95vw;
+  position: relative;
+}
+
 #titleArea {
   display: flex;
   flex-direction: column;
@@ -185,6 +208,10 @@ body {
 }
 
 @media screen and (max-width: 920px) {
+  img {
+    height: 8vh;
+  }
+
   #playText {
     margin-bottom: 20vh;
   }
