@@ -36,11 +36,14 @@ enterSection.addEventListener('click', function () {
             starWarsTheme.play();
             myFadeOut(longTimeArea);
             setTimeout(function () {
-                trailerArea.style.display = 'flex'
-                trailerArea.style.alignItems = 'center'
-                trailerArea.style.justifyContent = 'center'
-                myShrinkText(hollowStarWars);
-            }, 2000);
+                playIntroCrawl();
+            }, 1000);
+            setTimeout(function () {
+                myFadeOut(crawlArea);
+            }, 84000);
+            setTimeout(function () {
+                myFadeIn(playText);
+            }, 84000);
         });
     } else {
         setTimeout(function () {
@@ -48,25 +51,27 @@ enterSection.addEventListener('click', function () {
         }, 29000)
         setTimeout(function () {
             starWarsTheme.play();
-            trailerArea.style.display = 'flex'
-            trailerArea.style.flexDirection = 'column'
-            trailerArea.style.alignItems = 'center'
-            trailerArea.style.justifyContent = 'center'
-            trailerArea.style.alignContent = 'flex-end'
-            myShrinkText(hollowStarWarsText);
-        }, 30000)
+            playIntroCrawl();
+        }, 30000);
+        setTimeout(function () {
+            myFadeOut(crawlArea);
+        }, 114000);
+        setTimeout(function () {
+            myFadeIn(playText);
+        }, 114000);
     }
-    setTimeout(function () {
-        myFadeOut(crawlArea);
-    }, 114000);
-    setTimeout(function () {
-        myFadeIn(playText);
-    }, 114000);
-
 });
 
 
 // HELPER FUNCTION
+let playIntroCrawl = () => {
+    trailerArea.style.display = 'flex'
+    trailerArea.style.flexDirection = 'column'
+    trailerArea.style.alignItems = 'center'
+    trailerArea.style.justifyContent = 'center'
+    myShrinkText(hollowStarWarsText);
+}
+
 let myFadeIn = (dom) => {
     let opacity = 0;
     dom.style.display = 'flex';
