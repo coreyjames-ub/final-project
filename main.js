@@ -125,11 +125,6 @@ let growLaserHeight = (laserSide) => {
     }
 }
 
-let moveGrowingLaserYPos = (laserSide, top) => {
-    top = top - 1;
-    laserSide.style.top = top + 'vh';
-}
-
 let makeLaserDisplay = (laserSide) => {
     laserSide.style.display = 'flex';
     laserSide.style.position = 'absolute'
@@ -149,12 +144,15 @@ let intialLaserYPosition = (laserSide) => {
 }
 
 let moveLaser = (laserSide, laserYPostion, myLaserInterval) => {
+    console.log('inside move laser')
     laserYPostion = laserYPostion - 1;
-    leftLaser.style.top = laserYPostion + 'vh';
+    laserSide.style.top = laserYPostion + 'vh';
     if (laserYPostion <= 0) {
+        console.log('reach if statement')
         clearInterval(myLaserInterval);
         laserSide.style.display = 'none';
     }
+    return laserYPostion;
 }
 
 let fireLasers = (event) => {
@@ -165,8 +163,6 @@ let fireLasers = (event) => {
         makeLaserDisplay(rightLaser);
 
         //set intial Laser X and Y Position
-        // leftLaserXPosition = galacticDefenderXPosition;
-        // leftLaser.style.left = leftLaserXPosition + 'vw';
         intialLaserXPostion(leftLaser, 0);
         intialLaserXPostion(rightLaser, 4);
         leftLaserYPosition = intialLaserYPosition(leftLaser);
@@ -178,34 +174,9 @@ let fireLasers = (event) => {
         growLaserHeight(rightLaser);
 
         let myLaserInterval = setInterval(function () {
-            moveLaser(leftLaser, leftLaserYPosition, myLaserInterval);
-            moveLaser(rightLaser, rightLaserYPosition, myLaserInterval);
-            // leftLaserYPosition = leftLaserYPosition - 1;
-            // leftLaser.style.top = leftLaserYPosition + 'vh';
-            // if (leftLaserYPosition <= 0) {
-            //     clearInterval(myLaserInterval);
-            //     leftLaser.style.display = 'none';
-            // }
+            leftLaserYPosition = moveLaser(leftLaser, leftLaserYPosition, myLaserInterval);
+            rightLaserYPosition = moveLaser(rightLaser, rightLaserYPosition), myLaserInterval;
         }, 35);
-
-
-
-
-
-        // //moveGrowingLaserYPos
-        // leftLaser.style.top = '88.7vh'
-        // let leftTop = 88.7;
-        // for (let i = 0; i < 4; i++) {
-        //     moveGrowingLaserYPos(leftLaser, leftTop);
-        // };
-
-        // }, 35)
-
-        // // Update the Laser y velocity
-        // leftLaserYPosition += .1;
-
-        // // Apply the y position
-        // leftLaser.style.top = `${leftLaserYPosition}vh`;
 
     }
 }
