@@ -18,6 +18,26 @@ body {
   overflow: hidden;
 }
 
+.rightLaser {
+    background-color: orangered;
+    /* height: .1vh;
+    width: .1vh;
+    position: absolute;
+    top: 89vh;
+    left: 4.15vw;
+    border-radius: .1vh; */
+}
+
+.leftLaser {
+    background-color: orangered;
+    /* height: 4vh;
+    width: .3vw;
+    position: absolute;
+    top: 84.75vh;
+    left: 0.05vw;
+    border-radius: .5vh; */
+}
+
 img {
   height: 10vh;
   width: auto;

@@ -15,108 +15,210 @@ let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
 let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
-let tieFighter = document.querySelector('.tieFighter')
+let tieFighter = document.querySelector('.tieFighter');
+let leftLaser = document.querySelector('.leftLaser');
+let rightLaser = document.querySelector('.rightLaser');
 
 // GAME VARIABLES
-// Size of the game area (in viewport)
-const GAME_AREA_WIDTH = 95;
-const GAME_AREA_HEIGHT = 95;
 
-// Size of the paddles (in viewport)
-const PADDLE_HEIGHT = 100;
-const PADDLE_WIDTH = 20;
-
-// The x-velocity and x-position of the Galactic Defender
+// The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
 
-// The Y Position and Velocity of the User Paddle
+// The X Position and Y Position & Y Velocity of the Tie Fighter
 let tieFighterXPosition;
-let tieFighterXVelocity;
+let tieFighterYPosition;
+let tieFighterYVelocity;
+
+//The X Postion and Y Position & Y Velocity of the Left Laser
+let leftLaserXPosition;
+let rightLaserXPosition;
+let leftLaserYPosition;
+let rightLaserYPosition;
+let leftLaserYVelocity;
+let rightLaserYVelocity;
 
 
 
 // EVENT LISTENERS
 
 //DEV MODE
+enterSection.addEventListener('click', function () {
+    myFadeOut(titleArea);
+    setTimeout(function () {
+        myFadeIn(introArea);
+        trailerArea.style.display = 'flex'
+        playText.style.display = 'flex'
+    }, 1000)
+});
+
 // enterSection.addEventListener('click', function () {
 //     myFadeOut(titleArea);
 //     setTimeout(function(){
 //         myFadeIn(introArea);
-//         trailerArea.style.display = 'flex'
-//         playText.style.display = 'flex'
 //     }, 1000)
-// }); 
+//     setTimeout(function () {
+//         myFadeIn(productionArea);
+//     }, 1500);
+//     foxIntro.play();
+//     setTimeout(function () {
+//         myFadeOut(productionArea)
+//     }, 20500);
+//     setTimeout(function () {
+//         myFadeIn(longTimeArea);
+//     }, 22000)
+//     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+//         setTimeout(function () {
+//             myFadeIn(continueButton);
+//         }, 29000)
+//         continueButton.addEventListener('click', function () {
+//             starWarsTheme.play();
+//             myFadeOut(longTimeArea);
+//             setTimeout(function () {
+//                 playIntroCrawl();
+//             }, 1000);
+//             setTimeout(function () {
+//                 myFadeOut(crawlArea);
+//             }, 84000);
+//             setTimeout(function () {
+//                 myFadeIn(playText);
+//             }, 85000);
+//         });
+//     } else {
+//         setTimeout(function () {
+//             myFadeOut(longTimeArea);
+//         }, 29000)
+//         setTimeout(function () {
+//             starWarsTheme.play();
+//             playIntroCrawl();
+//         }, 30000);
+//         setTimeout(function () {
+//             myFadeOut(crawlArea);
+//         }, 114000);
+//         setTimeout(function () {
+//             myFadeIn(playText);
+//         }, 115000);
+//     }
+// });
 
-enterSection.addEventListener('click', function () {
-    myFadeOut(titleArea);
-    setTimeout(function(){
-        myFadeIn(introArea);
-    }, 1000)
+playText.addEventListener('click', function () {
+    myFadeOut(introArea);
     setTimeout(function () {
-        myFadeIn(productionArea);
-    }, 1500);
-    foxIntro.play();
-    setTimeout(function () {
-        myFadeOut(productionArea)
-    }, 20500);
-    setTimeout(function () {
-        myFadeIn(longTimeArea);
-    }, 22000)
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        setTimeout(function () {
-            myFadeIn(continueButton);
-        }, 29000)
-        continueButton.addEventListener('click', function () {
-            starWarsTheme.play();
-            myFadeOut(longTimeArea);
-            setTimeout(function () {
-                playIntroCrawl();
-            }, 1000);
-            setTimeout(function () {
-                myFadeOut(crawlArea);
-            }, 84000);
-            setTimeout(function () {
-                myFadeIn(playText);
-            }, 84000);
-        });
-    } else {
-        setTimeout(function () {
-            myFadeOut(longTimeArea);
-        }, 29000)
-        setTimeout(function () {
-            starWarsTheme.play();
-            playIntroCrawl();
-        }, 30000);
-        setTimeout(function () {
-            myFadeOut(crawlArea);
-        }, 114000);
-        setTimeout(function () {
-            myFadeIn(playText);
-        }, 114000);
-    }
-});
+        myFadeIn(gameArea);
+        startGame();
+        window.addEventListener("keydown", userArrow);
+        window.addEventListener('keydown', fireLasers);
+    }, 1000);
 
-playText.addEventListener('click', function(){
-  myFadeOut(introArea);
-  setTimeout(function(){
-    myFadeIn(gameArea); 
-    startGame();
-    window.addEventListener("keydown", userArrow);
-  }, 1000);
-      
 })
 
 // HELPER FUNCTIONS
+let growLaserHeight = (laserSide) => {
+    let height = 1;
+    laserSide.style.height = '1vh';
+    for (let i = 0; i < 3; i++) {
+        setTimeout(function () {
+            height = height + 1;
+            laserSide.style.height = height + 'vh';
+        }, 35)
+
+    }
+}
+
+let moveGrowingLaserYPos = (laserSide, top) => {
+    top = top - 1;
+    laserSide.style.top = top + 'vh';
+}
+
+let makeLaserDisplay = (laserSide) => {
+    laserSide.style.display = 'flex';
+    laserSide.style.position = 'absolute'
+    laserSide.style.width = '1vh';
+    laserSide.style.borderRadius = '0.5vh';
+}
+
+let intialLaserXPostion = (laserSide, xOffset) => {
+    let laserXPostion = galacticDefenderXPosition + xOffset;
+    laserSide.style.left = laserXPostion + 'vw';
+}
+
+let intialLaserYPosition = (laserSide) => {
+    let laserYPosition = 89;
+    laserSide.style.top = laserYPosition + 'vh';
+    return laserYPosition;
+}
+
+let moveLaser = (laserSide, laserYPostion, myLaserInterval) => {
+    laserYPostion = laserYPostion - 1;
+    leftLaser.style.top = laserYPostion + 'vh';
+    if (laserYPostion <= 0) {
+        clearInterval(myLaserInterval);
+        laserSide.style.display = 'none';
+    }
+}
+
+let fireLasers = (event) => {
+    if (event.code === 'Space') {
+
+        //make Laser Display
+        makeLaserDisplay(leftLaser);
+        makeLaserDisplay(rightLaser);
+
+        //set intial Laser X and Y Position
+        // leftLaserXPosition = galacticDefenderXPosition;
+        // leftLaser.style.left = leftLaserXPosition + 'vw';
+        intialLaserXPostion(leftLaser, 0);
+        intialLaserXPostion(rightLaser, 4);
+        leftLaserYPosition = intialLaserYPosition(leftLaser);
+        rightLaserYPosition = intialLaserYPosition(rightLaser);
+
+
+        //growLaserHeighht
+        growLaserHeight(leftLaser);
+        growLaserHeight(rightLaser);
+
+        let myLaserInterval = setInterval(function () {
+            moveLaser(leftLaser, leftLaserYPosition, myLaserInterval);
+            moveLaser(rightLaser, rightLaserYPosition, myLaserInterval);
+            // leftLaserYPosition = leftLaserYPosition - 1;
+            // leftLaser.style.top = leftLaserYPosition + 'vh';
+            // if (leftLaserYPosition <= 0) {
+            //     clearInterval(myLaserInterval);
+            //     leftLaser.style.display = 'none';
+            // }
+        }, 35);
+
+
+
+
+
+        // //moveGrowingLaserYPos
+        // leftLaser.style.top = '88.7vh'
+        // let leftTop = 88.7;
+        // for (let i = 0; i < 4; i++) {
+        //     moveGrowingLaserYPos(leftLaser, leftTop);
+        // };
+
+        // }, 35)
+
+        // // Update the Laser y velocity
+        // leftLaserYPosition += .1;
+
+        // // Apply the y position
+        // leftLaser.style.top = `${leftLaserYPosition}vh`;
+
+    }
+}
+
 let userArrow = (event) => {
-    if (event.key === 'ArrowLeft'){
-        if (galacticDefenderXPosition >= 1){
+    if (event.key === 'ArrowLeft') {
+        if (galacticDefenderXPosition >= 1) {
             galacticDefenderXVelocity = -1;
             galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
             galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
         }
-    } else if (event.key === 'ArrowRight'){
-        if (galacticDefenderXPosition <= 89){
+    } else if (event.key === 'ArrowRight') {
+        if (galacticDefenderXPosition <= 89) {
             galacticDefenderXVelocity = 1;
             galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
             galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
