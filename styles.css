@@ -32,10 +32,10 @@ img {
     top: 85vh;
 }
 
-.tieFighter{
+/* .tieFighter{
     position: absolute;
     top: 0vh;
-}
+} */
 
 #gameArea {
   display: none;

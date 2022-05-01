@@ -15,25 +15,17 @@ let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
 let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
-// let tieFighter;
-let leftLaser;
-let rightLaser;
-// let tieFighter = document.querySelector('.tieFighter');
-// let leftLaser = document.querySelector('.leftLaser');
-// let rightLaser = document.querySelector('.rightLaser');
 
 // GAME VARIABLES
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
 
-// The X Position and Y Position & Y Velocity of the Tie Fighter
-let tieFighterXPosition;
-let tieFighterYPosition;
-let tieFighterYVelocity;
+// TIE Fighter Object Structure
+let tieFighterObject = {};
 
 // Laser Object Structure
-let laserObject = {}
+let laserObject = {};
 
 // EVENT LISTENERS
 
@@ -103,34 +95,63 @@ playText.addEventListener('click', function () {
         startGame();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
-        
-        setTieFighterXPostion(createTieFighter(), 5);
-        setTieFighterXPostion(createTieFighter(), 50);
+        setInterval(tieFighterInvasion, 5000);
     }, 1000);
 
 })
 
 // HELPER FUNCTIONS
 
-let createTieFighter = () => {
-    tieFighter = document.createElement('img');
-    tieFighter.src = 'assets/tieFighter.png';
-    tieFighter.style.display = 'flex';
-    tieFighter.style.position = 'absolute';
-    tieFighterYPosition = 0;
-    tieFighter.style.top = tieFighterYPosition + 'vh';
-    gameArea.appendChild(tieFighter);
-    return tieFighter;
+let createTieFighterDom = (tieFighterId) => {
+    let tieFighterDom = document.createElement('img');
+    tieFighterDom.src = 'assets/tieFighter.png';
+    tieFighterDom.style.display = 'flex';
+    tieFighterDom.style.position = 'absolute';
+    tieFighterDom.id = tieFighterId;
+    tieFighterObject[tieFighterId] = {
+        tieFighterXPosition: 0,
+        tieFighterYPosition: 0,
+        tieFighterVelocity: 0,
+    }
+    gameArea.appendChild(tieFighterDom);
+    return tieFighterDom;
 }
 
-let setTieFighterXPostion = (tieFighter, num) => {
-    tieFighterXPosition = num;
-    tieFighter.style.left = tieFighterXPosition + 'vw';
-    return tieFighterXPosition;
+let initialTieFighterXPosition = (tieFighterDom, tieFighterId) => {
+    let tieFighterXPosition = Math.floor(Math.random()*90);
+    tieFighterDom.style.left = tieFighterXPosition + 'vw';
+    tieFighterObject[tieFighterId].tieFighterXPosition = tieFighterXPosition;
 }
 
+let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
+    let tieFighterYPosition = 0;
+    tieFighterDom.style.top = tieFighterYPosition + 'vh';
+    tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
+}
 
-let generateLaserId = () => {
+let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterInterval) => {
+    let tieFighterYPosition = tieFighterObject[tieFighterId].tieFighterYPosition + 1;
+    tieFighterDom.style.top = tieFighterYPosition + 'vh';
+    if (tieFighterYPosition >= 80) {
+        clearInterval(myTieFighterInterval);
+        tieFighterDom.style.display = 'none';
+    }
+    tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
+}
+
+let tieFighterInvasion = () => {
+
+    let tieFighterId = generateId();
+    let tieFighterDom = createTieFighterDom(tieFighterId);
+    initialTieFighterXPosition(tieFighterDom, tieFighterId);
+    initialTieFighterYPosition(tieFighterDom, tieFighterId);
+
+    let myTieFighterInterval = setInterval(function(){
+        moveTieFighter(tieFighterDom, tieFighterId, myTieFighterInterval);
+    }, 500);
+}
+
+let generateId = () => {
     let laserId = Math.ceil(Math.random()*1000000);
     return laserId;
 }
@@ -152,14 +173,14 @@ let createLaserDom = (laserId) => {
     return laserDom;
 }
 
-let intialLaserXPostion = (laserDom, laserId, xOffset) => {
+let initialLaserXPosition = (laserDom, laserId, xOffset) => {
     let laserXPosition = galacticDefenderXPosition + xOffset;
     laserDom.style.left = laserXPosition + 'vw';
     laserObject[laserId].laserXPosition = laserXPosition;
 }
 
-let intialLaserYPosition = (laserDom, laserId) => {
-    laserYPosition = 89;
+let initialLaserYPosition = (laserDom, laserId) => {
+    let laserYPosition = 89;
     laserDom.style.top = laserYPosition + 'vh';
     laserObject[laserId].laserYPosition = laserYPosition;
 }
@@ -177,7 +198,7 @@ let growLaserHeight = (laserDom) => {
 }
 
 let moveLaser = (laserDom, laserId, myLaserInterval) => {
-    laserYPostion = laserObject[laserId].laserYPosition - 1;
+    let laserYPostion = laserObject[laserId].laserYPosition - 1;
     laserDom.style.top = laserYPostion + 'vh';
     // console.log(tieFighterXPosition)
     if (laserYPostion <= 0) {
@@ -191,17 +212,17 @@ let fireLasers = (event) => {
     if (event.code === 'Space') {
 
         //LEFT LASER
-        let leftLaserId = generateLaserId()
+        let leftLaserId = generateId()
         let leftLaserDom = createLaserDom(leftLaserId);
-        intialLaserXPostion(leftLaserDom, leftLaserId, 0);
-        intialLaserYPosition(leftLaserDom, leftLaserId);
+        initialLaserXPosition(leftLaserDom, leftLaserId, 0);
+        initialLaserYPosition(leftLaserDom, leftLaserId);
         growLaserHeight(leftLaserDom);
 
         //RIGHT LASER
-        let rightLaserId = generateLaserId()
+        let rightLaserId = generateId()
         let rightLaserDom = createLaserDom(rightLaserId);
-        intialLaserXPostion(rightLaserDom, rightLaserId, 4.5);
-        intialLaserYPosition(rightLaserDom, rightLaserId);
+        initialLaserXPosition(rightLaserDom, rightLaserId, 4.5);
+        initialLaserYPosition(rightLaserDom, rightLaserId);
         growLaserHeight(rightLaserDom);
 
         let myLaserInterval = setInterval(function () {
