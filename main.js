@@ -135,11 +135,9 @@ let intialLaserYPosition = (laserSide) => {
 }
 
 let moveLaser = (laserSide, laserYPostion, myLaserInterval) => {
-    console.log('inside move laser')
     laserYPostion = laserYPostion - 1;
     laserSide.style.top = laserYPostion + 'vh';
     if (laserYPostion <= 0) {
-        console.log('reach if statement')
         clearInterval(myLaserInterval);
         laserSide.style.display = 'none';
     }
