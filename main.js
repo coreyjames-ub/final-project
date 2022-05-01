@@ -15,7 +15,7 @@ let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
 let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
-let tieFighter;
+// let tieFighter;
 let leftLaser;
 let rightLaser;
 // let tieFighter = document.querySelector('.tieFighter');
@@ -32,11 +32,8 @@ let tieFighterXPosition;
 let tieFighterYPosition;
 let tieFighterYVelocity;
 
-// The X Postion and Y Position and Y Velocity of the Lasers
-// let leftLaserYPosition;
-// let leftLaserXPosition;
-// let rightLaserXPosition;
-// let rightLaserYPosition;
+// Laser Object Structure
+let laserObject = {}
 
 // EVENT LISTENERS
 
@@ -106,8 +103,9 @@ playText.addEventListener('click', function () {
         startGame();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
-        createTieFighter();
-        setTieFighterPostion();
+        
+        setTieFighterXPostion(createTieFighter(), 5);
+        setTieFighterXPostion(createTieFighter(), 50);
     }, 1000);
 
 })
@@ -122,88 +120,93 @@ let createTieFighter = () => {
     tieFighterYPosition = 0;
     tieFighter.style.top = tieFighterYPosition + 'vh';
     gameArea.appendChild(tieFighter);
-    // return tieFighter;
+    return tieFighter;
 }
 
-let setTieFighterPostion = () => {
-    tieFighterXPosition = 0;
+let setTieFighterXPostion = (tieFighter, num) => {
+    tieFighterXPosition = num;
     tieFighter.style.left = tieFighterXPosition + 'vw';
+    return tieFighterXPosition;
 }
 
-let growLaserHeight = (laserSide) => {
+
+let generateLaserId = () => {
+    let laserId = Math.ceil(Math.random()*1000000);
+    return laserId;
+}
+
+let createLaserDom = (laserId) => {
+    let laserDom = document.createElement('div');
+    laserDom.style.display = 'flex';
+    laserDom.style.position = 'absolute'
+    laserDom.style.width = '1vh';
+    laserDom.style.borderRadius = '0.5vh';
+    laserDom.className = 'laser';
+    laserDom.id = laserId;
+    laserObject[laserId] = {
+        laserXPosition: 0,
+        laserYPosition: 0,
+        laserVelocity: 0,
+    }
+    gameArea.appendChild(laserDom);
+    return laserDom;
+}
+
+let intialLaserXPostion = (laserDom, laserId, xOffset) => {
+    let laserXPosition = galacticDefenderXPosition + xOffset;
+    laserDom.style.left = laserXPosition + 'vw';
+    laserObject[laserId].laserXPosition = laserXPosition;
+}
+
+let intialLaserYPosition = (laserDom, laserId) => {
+    laserYPosition = 89;
+    laserDom.style.top = laserYPosition + 'vh';
+    laserObject[laserId].laserYPosition = laserYPosition;
+}
+
+let growLaserHeight = (laserDom) => {
     let height = 1;
-    laserSide.style.height = '1vh';
+    laserDom.style.height = '1vh';
     for (let i = 0; i < 3; i++) {
         setTimeout(function () {
             height = height + 1;
-            laserSide.style.height = height + 'vh';
+            laserDom.style.height = height + 'vh';
         }, 35)
 
     }
 }
 
-let makeLaserDisplay = (laserSide) => {
-    laserSide.style.display = 'flex';
-    laserSide.style.position = 'absolute'
-    laserSide.style.width = '1vh';
-    laserSide.style.borderRadius = '0.5vh';
-    laserSide.className = 'laser';
-    gameArea.appendChild(laserSide);
-}
-
-let intialLaserXPostion = (laserSide, xOffset) => {
-    let laserXPosition = galacticDefenderXPosition + xOffset;
-    laserSide.style.left = laserXPosition + 'vw';
-    //might have to return the x pos -- not sure -- should be ok with global variables
-}
-
-let intialLaserYPosition = (laserSide) => {
-    laserYPosition = 89;
-    laserSide.style.top = laserYPosition + 'vh';
-    return laserYPosition;
-}
-
-let moveLaser = (laserSide, laserYPostion, myLaserInterval) => {
-    laserYPostion = laserYPostion - 1;
-    laserSide.style.top = laserYPostion + 'vh';
+let moveLaser = (laserDom, laserId, myLaserInterval) => {
+    laserYPostion = laserObject[laserId].laserYPosition - 1;
+    laserDom.style.top = laserYPostion + 'vh';
+    // console.log(tieFighterXPosition)
     if (laserYPostion <= 0) {
         clearInterval(myLaserInterval);
-        laserSide.style.display = 'none';
+        laserDom.style.display = 'none';
     }
-    return laserYPostion;
+    laserObject[laserId].laserYPosition = laserYPostion;
 }
 
 let fireLasers = (event) => {
     if (event.code === 'Space') {
 
-        //The X Postion and Y Position & Y Velocity of the Left Laser
-        // let leftLaserXPosition;
-        // let rightLaserXPosition;
-        let leftLaserYPosition;
-        let rightLaserYPosition;
-        // let leftLaserYVelocity;
-        // let rightLaserYVelocity;
+        //LEFT LASER
+        let leftLaserId = generateLaserId()
+        let leftLaserDom = createLaserDom(leftLaserId);
+        intialLaserXPostion(leftLaserDom, leftLaserId, 0);
+        intialLaserYPosition(leftLaserDom, leftLaserId);
+        growLaserHeight(leftLaserDom);
 
-        let leftLaser = document.createElement('div');
-        let rightLaser = document.createElement('div');
-
-        //make Laser Display
-        makeLaserDisplay(leftLaser);
-        makeLaserDisplay(rightLaser);
-
-        //set intial Laser X and Y Position
-        intialLaserXPostion(leftLaser, 0);
-        intialLaserXPostion(rightLaser, 4);
-        leftLaserYPosition = intialLaserYPosition(leftLaser);
-        rightLaserYPosition = intialLaserYPosition(rightLaser);
-
-        //growLaserHeighht
-        growLaserHeight(leftLaser);
-        growLaserHeight(rightLaser);
+        //RIGHT LASER
+        let rightLaserId = generateLaserId()
+        let rightLaserDom = createLaserDom(rightLaserId);
+        intialLaserXPostion(rightLaserDom, rightLaserId, 4.5);
+        intialLaserYPosition(rightLaserDom, rightLaserId);
+        growLaserHeight(rightLaserDom);
 
         let myLaserInterval = setInterval(function () {
-            leftLaserYPosition = moveLaser(leftLaser, leftLaserYPosition, myLaserInterval);
-            rightLaserYPosition = moveLaser(rightLaser, rightLaserYPosition), myLaserInterval;
+            moveLaser(leftLaserDom, leftLaserId, myLaserInterval);
+            moveLaser(rightLaserDom, rightLaserId,  myLaserInterval);
         }, 35);
 
     }
