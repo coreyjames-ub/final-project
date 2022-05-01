@@ -15,7 +15,10 @@ let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
 let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
-let tieFighter = document.querySelector('.tieFighter');
+let tieFighter;
+let leftLaser;
+let rightLaser;
+// let tieFighter = document.querySelector('.tieFighter');
 // let leftLaser = document.querySelector('.leftLaser');
 // let rightLaser = document.querySelector('.rightLaser');
 
@@ -28,6 +31,12 @@ let galacticDefenderXVelocity;
 let tieFighterXPosition;
 let tieFighterYPosition;
 let tieFighterYVelocity;
+
+// The X Postion and Y Position and Y Velocity of the Lasers
+let leftLaserYPosition;
+let leftLaserXPosition;
+let rightLaserXPosition;
+let rightLaserYPosition;
 
 // EVENT LISTENERS
 
@@ -97,11 +106,30 @@ playText.addEventListener('click', function () {
         startGame();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
+        createTieFighter();
+        setTieFighterPostion();
     }, 1000);
 
 })
 
 // HELPER FUNCTIONS
+
+let createTieFighter = () => {
+    tieFighter = document.createElement('img');
+    tieFighter.src = 'assets/tieFighter.png';
+    tieFighter.style.display = 'flex';
+    tieFighter.style.position = 'absolute';
+    tieFighterYPosition = 0;
+    tieFighter.style.top = tieFighterYPosition + 'vh';
+    gameArea.appendChild(tieFighter);
+    // return tieFighter;
+}
+
+let setTieFighterPostion = () => {
+    tieFighterXPosition = 0;
+    tieFighter.style.left = tieFighterXPosition + 'vw';
+}
+
 let growLaserHeight = (laserSide) => {
     let height = 1;
     laserSide.style.height = '1vh';
@@ -123,13 +151,14 @@ let makeLaserDisplay = (laserSide) => {
     gameArea.appendChild(laserSide);
 }
 
-let intialLaserXPostion = (laserSide, xOffset) => {
-    let laserXPostion = galacticDefenderXPosition + xOffset;
-    laserSide.style.left = laserXPostion + 'vw';
+let intialLaserXPostion = (laserSide, laserXPosition, xOffset) => {
+    laserXPosition = galacticDefenderXPosition + xOffset;
+    laserSide.style.left = laserXPosition + 'vw';
+    //might have to return the x pos -- not sure -- should be ok with global variables
 }
 
-let intialLaserYPosition = (laserSide) => {
-    let laserYPosition = 89;
+let intialLaserYPosition = (laserSide, laserYPosition) => {
+    laserYPosition = 89;
     laserSide.style.top = laserYPosition + 'vh';
     return laserYPosition;
 }
@@ -150,8 +179,8 @@ let fireLasers = (event) => {
         //The X Postion and Y Position & Y Velocity of the Left Laser
         // let leftLaserXPosition;
         // let rightLaserXPosition;
-        let leftLaserYPosition;
-        let rightLaserYPosition;
+        // leftLaserYPosition;
+        // rightLaserYPosition;
         // let leftLaserYVelocity;
         // let rightLaserYVelocity;
 
@@ -163,10 +192,13 @@ let fireLasers = (event) => {
         makeLaserDisplay(rightLaser);
 
         //set intial Laser X and Y Position
-        intialLaserXPostion(leftLaser, 0);
-        intialLaserXPostion(rightLaser, 4);
-        leftLaserYPosition = intialLaserYPosition(leftLaser);
-        rightLaserYPosition = intialLaserYPosition(rightLaser);
+        intialLaserXPostion(leftLaser, leftLaserXPosition, 0);
+        intialLaserXPostion(rightLaser, rightLaserXPosition, 4);
+        // I THINK BC OF GLOBAL VARIABLE
+        // leftLaserYPosition = intialLaserYPosition(leftLaser, leftLaserYPosition);
+        // rightLaserYPosition = intialLaserYPosition(rightLaser, rightLaserYPosition);
+        intialLaserYPosition(leftLaser, leftLaserYPosition);
+        intialLaserYPosition(rightLaser, rightLaserYPosition);
 
         //growLaserHeighht
         growLaserHeight(leftLaser);
