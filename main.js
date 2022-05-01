@@ -16,11 +16,10 @@ let playText = document.querySelector('#playText');
 let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
 let tieFighter = document.querySelector('.tieFighter');
-let leftLaser = document.querySelector('.leftLaser');
-let rightLaser = document.querySelector('.rightLaser');
+// let leftLaser = document.querySelector('.leftLaser');
+// let rightLaser = document.querySelector('.rightLaser');
 
 // GAME VARIABLES
-
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
@@ -29,16 +28,6 @@ let galacticDefenderXVelocity;
 let tieFighterXPosition;
 let tieFighterYPosition;
 let tieFighterYVelocity;
-
-//The X Postion and Y Position & Y Velocity of the Left Laser
-let leftLaserXPosition;
-let rightLaserXPosition;
-let leftLaserYPosition;
-let rightLaserYPosition;
-let leftLaserYVelocity;
-let rightLaserYVelocity;
-
-
 
 // EVENT LISTENERS
 
@@ -130,6 +119,8 @@ let makeLaserDisplay = (laserSide) => {
     laserSide.style.position = 'absolute'
     laserSide.style.width = '1vh';
     laserSide.style.borderRadius = '0.5vh';
+    laserSide.className = 'laser';
+    gameArea.appendChild(laserSide);
 }
 
 let intialLaserXPostion = (laserSide, xOffset) => {
@@ -158,6 +149,17 @@ let moveLaser = (laserSide, laserYPostion, myLaserInterval) => {
 let fireLasers = (event) => {
     if (event.code === 'Space') {
 
+        //The X Postion and Y Position & Y Velocity of the Left Laser
+        // let leftLaserXPosition;
+        // let rightLaserXPosition;
+        let leftLaserYPosition;
+        let rightLaserYPosition;
+        // let leftLaserYVelocity;
+        // let rightLaserYVelocity;
+
+        let leftLaser = document.createElement('div');
+        let rightLaser = document.createElement('div');
+
         //make Laser Display
         makeLaserDisplay(leftLaser);
         makeLaserDisplay(rightLaser);
@@ -167,7 +169,6 @@ let fireLasers = (event) => {
         intialLaserXPostion(rightLaser, 4);
         leftLaserYPosition = intialLaserYPosition(leftLaser);
         rightLaserYPosition = intialLaserYPosition(rightLaser);
-
 
         //growLaserHeighht
         growLaserHeight(leftLaser);
