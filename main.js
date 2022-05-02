@@ -17,6 +17,9 @@ let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
 
 // GAME VARIABLES
+// Score
+let score;
+
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
@@ -27,10 +30,28 @@ let tieFighterObject = {};
 // Laser Object Structure
 let laserObject = {};
 
+// SET UP SCORE IN LOCAL STORAGE
+let getScore = () => {
+    score = Number(localStorage.getItem('score'));
+    if (score === null) {
+        score = 0;
+        localStorage.setItem('score', score);
+    }
+    console.log(score);
+};
+
+// ADD POINTS ON HIT
+let addPointsOnHit = () => {
+    score = score + 25;
+    localStorage.setItem('score', score);
+    console.log(score)
+};
+
 // EVENT LISTENERS
 
 //DEV MODE
 enterSection.addEventListener('click', function () {
+    getScore();
     myFadeOut(titleArea);
     setTimeout(function () {
         myFadeIn(introArea);
@@ -229,6 +250,7 @@ let moveLaser = (laserDom, laserId, myLaserInterval) => {
             laserDom.remove();
             delete laserObject[laserId];
             clearInterval(myLaserInterval);
+            addPointsOnHit();
             return;
         }
     }
