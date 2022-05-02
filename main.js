@@ -118,7 +118,7 @@ let createTieFighterDom = (tieFighterId) => {
 }
 
 let initialTieFighterXPosition = (tieFighterDom, tieFighterId) => {
-    let tieFighterXPosition = Math.floor(Math.random()*90);
+    let tieFighterXPosition = Math.floor(Math.random() * 90);
     tieFighterDom.style.left = tieFighterXPosition + 'vw';
     tieFighterObject[tieFighterId].tieFighterXPosition = tieFighterXPosition;
 }
@@ -130,12 +130,34 @@ let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
 }
 
 let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterInterval) => {
+    if (tieFighterDom.style.display == 'none'){
+        tieFighterDom.remove();
+        delete tieFighterObject[tieFighterId];
+        clearInterval(myTieFighterInterval);
+        return;
+    }
     let tieFighterYPosition = tieFighterObject[tieFighterId].tieFighterYPosition + 1;
     tieFighterDom.style.top = tieFighterYPosition + 'vh';
     if (tieFighterYPosition >= 80) {
+        tieFighterDom.remove();
+        delete tieFighterObject[tieFighterId];
         clearInterval(myTieFighterInterval);
-        tieFighterDom.style.display = 'none';
+        return;
     }
+    // for (let laserId in laserObject) {
+    //     if (laserObject[laserId].laserXPosition >= (tieFighterObject[tieFighterId].tieFighterXPosition - 0.9) &&
+    //         laserObject[laserId].laserXPosition <= (tieFighterObject[tieFighterId].tieFighterXPosition + 5.9) &&
+    //         laserObject[laserId].laserYPosition >= tieFighterYPosition &&
+    //         laserObject[laserId].laserYPosition <= (tieFighterYPosition + 11)){
+
+    //         tieFighterDom.remove();
+    //         delete tieFighterObject[tieFighterId];
+    //         clearInterval(myTieFighterInterval);
+
+    //         return;
+
+    //     }
+    // }
     tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
 }
 
@@ -146,13 +168,13 @@ let tieFighterInvasion = () => {
     initialTieFighterXPosition(tieFighterDom, tieFighterId);
     initialTieFighterYPosition(tieFighterDom, tieFighterId);
 
-    let myTieFighterInterval = setInterval(function(){
+    let myTieFighterInterval = setInterval(function () {
         moveTieFighter(tieFighterDom, tieFighterId, myTieFighterInterval);
     }, 500);
 }
 
 let generateId = () => {
-    let laserId = Math.ceil(Math.random()*1000000);
+    let laserId = Math.ceil(Math.random() * 1000000);
     return laserId;
 }
 
@@ -200,10 +222,24 @@ let growLaserHeight = (laserDom) => {
 let moveLaser = (laserDom, laserId, myLaserInterval) => {
     let laserYPostion = laserObject[laserId].laserYPosition - 1;
     laserDom.style.top = laserYPostion + 'vh';
-    // console.log(tieFighterXPosition)
     if (laserYPostion <= 0) {
+        laserDom.remove();
+        delete laserObject[laserId];
         clearInterval(myLaserInterval);
-        laserDom.style.display = 'none';
+        return;
+    }
+    for (let tieFighterId in tieFighterObject) {
+        if (laserObject[laserId].laserXPosition >= tieFighterObject[tieFighterId].tieFighterXPosition &&
+            laserObject[laserId].laserXPosition <= tieFighterObject[tieFighterId].tieFighterXPosition + 5 &&
+            laserYPostion >= tieFighterObject[tieFighterId].tieFighterYPosition &&
+            laserYPostion <= tieFighterObject[tieFighterId].tieFighterYPosition + 5) {
+                let tieDom = document.getElementById(tieFighterId);
+                tieDom.style.display = 'none';
+            laserDom.remove();
+            delete laserObject[laserId];
+            clearInterval(myLaserInterval);
+            return;
+        }
     }
     laserObject[laserId].laserYPosition = laserYPostion;
 }
@@ -217,6 +253,9 @@ let fireLasers = (event) => {
         initialLaserXPosition(leftLaserDom, leftLaserId, 0);
         initialLaserYPosition(leftLaserDom, leftLaserId);
         growLaserHeight(leftLaserDom);
+        let myLeftLaserInterval = setInterval(function () {
+            moveLaser(leftLaserDom, leftLaserId, myLeftLaserInterval);
+        }, 35);
 
         //RIGHT LASER
         let rightLaserId = generateId()
@@ -224,10 +263,8 @@ let fireLasers = (event) => {
         initialLaserXPosition(rightLaserDom, rightLaserId, 4.5);
         initialLaserYPosition(rightLaserDom, rightLaserId);
         growLaserHeight(rightLaserDom);
-
-        let myLaserInterval = setInterval(function () {
-            moveLaser(leftLaserDom, leftLaserId, myLaserInterval);
-            moveLaser(rightLaserDom, rightLaserId,  myLaserInterval);
+        let myRightLaserInterval = setInterval(function () {
+            moveLaser(rightLaserDom, rightLaserId, myRightLaserInterval);
         }, 35);
 
     }
