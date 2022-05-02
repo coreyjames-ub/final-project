@@ -144,20 +144,6 @@ let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterInterval) => {
         clearInterval(myTieFighterInterval);
         return;
     }
-    // for (let laserId in laserObject) {
-    //     if (laserObject[laserId].laserXPosition >= (tieFighterObject[tieFighterId].tieFighterXPosition - 0.9) &&
-    //         laserObject[laserId].laserXPosition <= (tieFighterObject[tieFighterId].tieFighterXPosition + 5.9) &&
-    //         laserObject[laserId].laserYPosition >= tieFighterYPosition &&
-    //         laserObject[laserId].laserYPosition <= (tieFighterYPosition + 11)){
-
-    //         tieFighterDom.remove();
-    //         delete tieFighterObject[tieFighterId];
-    //         clearInterval(myTieFighterInterval);
-
-    //         return;
-
-    //     }
-    // }
     tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
 }
 
