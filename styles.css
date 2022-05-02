@@ -18,8 +18,41 @@ body {
   overflow: hidden;
 }
 
+.typeText {
+  color: white;
+  font-family: "Black Ops One";
+  font-size: 2.8vw;
+  margin: 2.3vw;
+  padding: 0;
+  letter-spacing: 0.5vw;
+}
+
+#gamePlayEndArea {
+  display: none;
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+  box-shadow: 0 12px 50px 0 skyblue, 0 -10px 500px 0 goldenrod;
+  background-color: rgba(0, 0, 0, 0.89);
+  top: 12vh;
+  left: 20vw;
+  z-index: 2;
+}
+
+#restartArea {
+  display: none;
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+  box-shadow: 0 12px 50px 0 skyblue, 0 -10px 500px 0 skyblue;
+  background-color: rgba(0, 0, 0, 0.89);
+  top: 12vh;
+  left: 20vw;
+  z-index: 2;
+}
+
 .laser {
-    background-color: orangered;
+  background-color: orangered;
 }
 
 img {
@@ -27,15 +60,10 @@ img {
   width: 5vw;
 }
 
-#galacticDefender{
-    position: absolute;
-    top: 85vh;
+#galacticDefender {
+  position: absolute;
+  top: 85vh;
 }
-
-/* .tieFighter{
-    position: absolute;
-    top: 0vh;
-} */
 
 #gameArea {
   display: none;
@@ -67,7 +95,7 @@ img {
   border: solid rgba(0, 0, 0, 0.1);
 }
 
-#playText {
+.play {
   display: none;
   color: goldenrod;
   font-family: Star Wars hallow;
