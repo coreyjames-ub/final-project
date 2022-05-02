@@ -130,7 +130,7 @@ let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
 }
 
 let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterInterval) => {
-    if (tieFighterDom.style.display == 'none'){
+    if (tieFighterDom.style.display == 'none') {
         tieFighterDom.remove();
         delete tieFighterObject[tieFighterId];
         clearInterval(myTieFighterInterval);
@@ -219,8 +219,13 @@ let moveLaser = (laserDom, laserId, myLaserInterval) => {
             laserObject[laserId].laserXPosition <= tieFighterObject[tieFighterId].tieFighterXPosition + 5 &&
             laserYPostion >= tieFighterObject[tieFighterId].tieFighterYPosition &&
             laserYPostion <= tieFighterObject[tieFighterId].tieFighterYPosition + 5) {
-                let tieDom = document.getElementById(tieFighterId);
-                tieDom.style.display = 'none';
+            let tieDom = document.getElementById(tieFighterId);
+            tieDom.style.display = 'none';
+            let explosionDom = explodeTieFighter(tieFighterObject[tieFighterId].tieFighterXPosition, tieFighterObject[tieFighterId].tieFighterYPosition);
+            myFadeOut(explosionDom);
+            setTimeout(function () {
+                explosionDom.remove();
+            }, 2000);
             laserDom.remove();
             delete laserObject[laserId];
             clearInterval(myLaserInterval);
@@ -228,6 +233,17 @@ let moveLaser = (laserDom, laserId, myLaserInterval) => {
         }
     }
     laserObject[laserId].laserYPosition = laserYPostion;
+}
+
+let explodeTieFighter = (left, top) => {
+    let explosionDom = document.createElement('img');
+    explosionDom.src = 'assets/explosion.png'
+    explosionDom.style.display = 'flex';
+    explosionDom.style.position = 'absolute';
+    gameArea.appendChild(explosionDom);
+    explosionDom.style.left = left + 'vw';
+    explosionDom.style.top = top + 'vh';
+    return explosionDom;
 }
 
 let fireLasers = (event) => {
