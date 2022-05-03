@@ -30,12 +30,6 @@ let scoreBoardText = document.querySelector('#scoreBoardText');
 let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
 let restartArea = document.querySelector('#restartArea');
-let leftArrow = document.querySelector('#leftArrow');
-let rightArrow = document.querySelector('#rightArrow');
-let fireLaser = document.querySelector('#fireLaserMobile');
-
-let isMobile = false;
-
 
 // GAME VARIABLES
 let score;
@@ -188,11 +182,6 @@ enterSection.addEventListener('click', function () {
         myFadeIn(longTimeArea);
     }, 22000)
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        // this is for mobile.
-        isMobile = true;
-        window.scrollTo(0, 1);
-        gameArea.style.height = '100vh';
-        gameArea.style.width = '100vw';
         setTimeout(function () {
             myFadeIn(continueButton);
         }, 29000)
@@ -208,9 +197,9 @@ enterSection.addEventListener('click', function () {
             setTimeout(function () {
                 myFadeIn(playText);
             }, 85000);
-            setTimeout(function(){
+            setTimeout(function () {
                 myFadeIn(tagLineTwo);
-            },86000)
+            }, 86000)
         });
     } else {
         setTimeout(function () {
@@ -227,9 +216,9 @@ enterSection.addEventListener('click', function () {
             myFadeIn(playText);
         }, 115000);
         playText.style.position = 'absolute';
-        setTimeout(function(){
+        setTimeout(function () {
             myFadeIn(tagLineTwo);
-        },116000)
+        }, 116000)
     }
 });
 
@@ -244,14 +233,6 @@ playText.addEventListener('click', function () {
         playLevelTwo();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
-
-
-        leftArrow.addEventListener('click', leftMobileArrow);
-
-        rightArrow.addEventListener('click', rightMobileArrow);
-
-        fireLaser.addEventListener('click', fireLaserMobile);
-
         let myTieFighterInvasionInterval = setInterval(function () {
             tieFighterInvasion(myTieFighterInvasionInterval)
         }, tieFighterInvasionCreationInterval);
@@ -402,9 +383,6 @@ let initialLaserXPosition = (laserDom, laserId, xOffset) => {
 
 let initialLaserYPosition = (laserDom, laserId) => {
     let laserYPosition = 89;
-    if (isMobile == true) {
-        laserYPosition = 79;
-    }
     laserDom.style.top = laserYPosition + 'vh';
     laserObject[laserId].laserYPosition = laserYPosition;
 }
@@ -640,45 +618,6 @@ let addPointsOnHit = () => {
     console.log(score)
 };
 
-let fireLaserMobile = () => {
-
-    // I kinda like that on mobile you can fire laser when gamePlayEnd is true
-
-    // if (gamePlayEnded == true) {
-    //     return;
-    // }
-
-    xWingFire.pause();
-    xWingFire.currentTime = 0;
-    //LEFT LASER
-    let leftLaserId = generateId()
-    let leftLaserDom = createLaserDom(leftLaserId);
-    initialLaserXPosition(leftLaserDom, leftLaserId, 0.05);
-    initialLaserYPosition(leftLaserDom, leftLaserId);
-    growLaserHeight(leftLaserDom);
-    let myLeftLaserInterval = setInterval(function () {
-        moveLaser(leftLaserDom, leftLaserId, myLeftLaserInterval);
-    }, laserSpeedInterval);
-
-    //RIGHT LASER
-    let rightLaserId = generateId()
-    let rightLaserDom = createLaserDom(rightLaserId);
-    if (isMobile === true) {
-        console.log('is in mobile x offset for laser')
-        initialLaserXPosition(rightLaserDom, rightLaserId, 8.45);
-    } else {
-        initialLaserXPosition(rightLaserDom, rightLaserId, 4.45);
-    }
-
-    initialLaserYPosition(rightLaserDom, rightLaserId);
-    growLaserHeight(rightLaserDom);
-    let myRightLaserInterval = setInterval(function () {
-        moveLaser(rightLaserDom, rightLaserId, myRightLaserInterval);
-    }, laserSpeedInterval);
-
-    xWingFire.play();
-}
-
 let fireLasers = (event) => {
     if (gamePlayEnded == true) {
         return;
@@ -707,29 +646,6 @@ let fireLasers = (event) => {
         }, laserSpeedInterval);
 
         xWingFire.play();
-    }
-}
-
-let leftMobileArrow = () => {
-    if (gamePlayEnded == true) {
-        return;
-    }
-    if (galacticDefenderXPosition >= 1) {
-        galacticDefenderXVelocity = -(xWingVelocity);
-        galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
-        galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
-    }
-}
-
-let rightMobileArrow = () => {
-    if (gamePlayEnded == true) {
-        return;
-    }
-    if (galacticDefenderXPosition <= 89) {
-        galacticDefenderXVelocity = xWingVelocity;
-        galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
-        galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
-
     }
 }
 

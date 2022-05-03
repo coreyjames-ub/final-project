@@ -246,16 +246,16 @@ img {
 }
 
 #tagLineTwo {
-    display: none;
-    color: white;
-    font-family: Lora;
-    font-size: 5vw;
-    letter-spacing: 1vw;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 60vh;
-  }
+  display: none;
+  color: white;
+  font-family: Lora;
+  font-size: 5vw;
+  letter-spacing: 1vw;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 60vh;
+}
 
 #enter {
   color: goldenrod;
@@ -279,31 +279,8 @@ img {
   cursor: pointer;
 }
 
-#controllerSection {
-  display: none;
-  flex-direction: row;
-}
-
-#leftArrow{
-    display: none;
-}
-
-#rightArrow{
-    display: none;
-}
-
-#fireLaserMobile{
-    display: none;
-}
-
 @media screen and (max-width: 920px) {
-  #controllerSection {
-    position: absolute;
-    top: 85vh;
-    left: 20vw;
-  }
-
-  img {
+img {
     height: 8vh;
   }
 
@@ -311,39 +288,6 @@ img {
     position: absolute;
     top: 75vh;
   }
-
-  #leftArrow{
-      position: absolute;
-      top: 85vh;
-      left: 5vw; 
-      display: flex; 
-      width: 24vw;
-  }
-
-  #rightArrow{
-      position: absolute;
-      top: 85vh;
-      left: 70vw;
-      display: flex; 
-      width: 24vw;
-  }
-
-  #fireLaserMobile{
-     position: absolute;
-     top: 85vh; 
-     left: 38vw;
-     display: flex;
-     width: 24vw;
-     height: auto;
-     box-shadow: 0 12px 16px 0 skyblue, 0 17px 50px 0 skyblue,
-    -17px 0px 50px 0 skyblue, 0px -17px 50px 0 skyblue;
-  background-color: rgba(0, 0, 0, 0.3);
-  }
-
-  /* #playText {
-    margin: 0;
-    padding: 0;
-  } */
 
   #productionArea {
     display: none;
