@@ -31,6 +31,9 @@ let invaded;
 let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
 let scoreBoard;
 let level;
+let laserSpeedInterval = 35;
+let tieFighterInvasionSpeedInterval = 500;
+let tieFighterInvasionCreationInterval = 5000;
 
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
@@ -177,16 +180,7 @@ playText.addEventListener('click', function () {
 });
 
 playAgain.addEventListener('click', function(){
-    for (let tieFighterId in tieFighterObject){
-        let tieDom = document.getElementById(tieFighterId);
-        tieDom.remove();
-        delete tieFighterObject[tieFighterId];
-    }
-    for (let laserId in laserObject){
-        let laserDom = document.getElementById(laserId);
-        laserDom.remove();
-        delete laserObject[laserId];
-    }
+    // clearInterval(myTieFighterInvasionInterval)
     gamePlayEnded = false;
     localStorage.setItem('gamePlayEnded', gamePlayEnded);
     score = 0;
@@ -198,7 +192,7 @@ playAgain.addEventListener('click', function(){
         startGame();
         let myTieFighterInvasionInterval = setInterval(function () {
             tieFighterInvasion(myTieFighterInvasionInterval)
-        }, 5000);
+        }, tieFighterInvasionCreationInterval);
     }, 1000)
 })
 
@@ -233,6 +227,9 @@ let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
 
 let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval) => {
     if (gamePlayEnded == true) {
+        tieFighterDom.remove();
+        delete tieFighterObject[tieFighterId];
+        clearInterval(myTieFighterMoveInterval);
         return;
     }
     if (tieFighterDom.style.display == 'none') {
@@ -267,7 +264,7 @@ let tieFighterInvasion = (myTieFighterInvasionInterval) => {
 
     let myTieFighterMoveInterval = setInterval(function () {
         moveTieFighter(tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval);
-    }, 500);
+    }, tieFighterInvasionSpeedInterval);
 }
 
 
@@ -319,6 +316,9 @@ let growLaserHeight = (laserDom) => {
 
 let moveLaser = (laserDom, laserId, myLaserInterval) => {
     if (gamePlayEnded == true) {
+        laserDom.remove();
+        delete laserObject[laserId];
+        clearInterval(myLaserInterval);
         return;
     }
     let laserYPostion = laserObject[laserId].laserYPosition - 1;
@@ -421,6 +421,7 @@ let displayGamePlayEndedArea = () => {
             scoreBoardText.innerText = '';
             gamePlayEndArea.style.display = 'none';
             restartArea.style.display = 'flex';
+            myFadeIn(restartArea);
             myFadeIn(playAgain);
         }, 26000);
         setTimeout(function(){
@@ -473,8 +474,6 @@ let updateScoreBoard = () => {
 }
 
 
-
-
 let tieFighterInvaded = () => {
     gamePlayEnded = true;
     localStorage.setItem('gamePlayEnded', gamePlayEnded);
@@ -493,6 +492,9 @@ let fireLasers = (event) => {
     if (gamePlayEnded == true) {
         return;
     }
+
+
+
     if (event.code === 'Space') {
 
         //LEFT LASER
@@ -574,6 +576,7 @@ let myFadeIn = (dom) => {
     dom.style.opacity = '0';
     let myTimer = setInterval(function () {
         if (opacity >= 1) {
+            dom.style.opacity = 1;
             clearInterval(myTimer);
         }
         dom.style.opacity = opacity;
