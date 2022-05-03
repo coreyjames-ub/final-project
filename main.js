@@ -520,7 +520,7 @@ let displayGamePlayEndedArea = () => {
             } else if (completedLevel === '2') {
                 topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
             } else if (invaded === true) {
-                topScoreText = topScoreText + '\nCome on Kid.\nWe have keep fighting!'
+                topScoreText = topScoreText + '\nCome on Kid.\nWe have to get back\nout there and keep on fighting!'
             }
             typeText(scoreBoardText, topScoreText);
         }, 18000);
