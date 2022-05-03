@@ -516,7 +516,7 @@ let displayGamePlayEndedArea = () => {
             };
             topScoreText = topScoreText + '\n' + specialText;
             if (completedLevel === '1') {
-                topScoreText = topScoreText + '\nLooks like more\nTIE Fighters are\nin enroute.\nThey need us\nout there . . . .'
+                topScoreText = topScoreText + '\nLooks like more\nTIE Fighters are\nin enroute and\nthey need us out there!'
             } else if (completedLevel === '2') {
                 topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
             } else if (invaded === true) {
