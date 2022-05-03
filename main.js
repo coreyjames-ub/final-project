@@ -226,6 +226,7 @@ enterSection.addEventListener('click', function () {
         setTimeout(function () {
             myFadeIn(playText);
         }, 115000);
+        playText.style.position = 'absolute';
         setTimeout(function(){
             myFadeIn(tagLineTwo);
         },116000)

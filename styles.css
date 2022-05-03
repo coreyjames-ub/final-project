@@ -253,6 +253,8 @@ img {
     letter-spacing: 1vw;
     margin: 0;
     padding: 0;
+    position: absolute;
+    top: 60vh;
   }
 
 #enter {
@@ -339,7 +341,8 @@ img {
   }
 
   /* #playText {
-    margin-bottom: 3vh;
+    margin: 0;
+    padding: 0;
   } */
 
   #productionArea {
