@@ -29,6 +29,9 @@ let scoreBoardText = document.querySelector('#scoreBoardText');
 let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
 let restartArea = document.querySelector('#restartArea');
+let leftArrow = document.querySelector('#leftArrow');
+let rightArrow = document.querySelector('#rightArrow');
+let fireLaserMobile = document.querySelector('#fireLaserMobile')
 
 
 // GAME VARIABLES
@@ -149,64 +152,71 @@ let getCompletedLevel = () => {
 
 // EVENT LISTENERS
 
-//DEV MODE
+// DEV MODE
+enterSection.addEventListener('click', function () {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        gameArea.style.height = '100vh';
+        gameArea.style.width = '100vw';
+        
+    }
+    myFadeOut(titleArea);
+    setTimeout(function () {
+        myFadeIn(introArea);
+        trailerArea.style.display = 'flex'
+        playText.style.display = 'flex'
+    }, 1000)
+});
+
 // enterSection.addEventListener('click', function () {
 //     myFadeOut(titleArea);
-//     setTimeout(function () {
-//         myFadeIn(introArea);
-//         trailerArea.style.display = 'flex'
-//         playText.style.display = 'flex'
-//     }, 1000)
+    // setTimeout(function(){
+    //     myFadeIn(introArea);
+    // }, 1000)
+    // setTimeout(function () {
+    //     myFadeIn(productionArea);
+    // }, 1500);
+    // foxIntro.play();
+    // setTimeout(function () {
+    //     myFadeOut(productionArea)
+    // }, 20500);
+    // setTimeout(function () {
+        // myFadeIn(longTimeArea);
+    // }, 22000)
+    // if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    //     gameArea.style.height = '80vh';
+    //     gameArea.style.width = '80vw';
+//         setTimeout(function () {
+//             myFadeIn(continueButton);
+//         }, 29000)
+//         continueButton.addEventListener('click', function () {
+//             starWarsTheme.play();
+//             myFadeOut(longTimeArea);
+//             setTimeout(function () {
+//                 playIntroCrawl();
+//             }, 1000);
+//             setTimeout(function () {
+//                 myFadeOut(crawlArea);
+//             }, 84000);
+//             setTimeout(function () {
+//                 myFadeIn(playText);
+//             }, 85000);
+//         });
+//     } else {
+//         setTimeout(function () {
+//             myFadeOut(longTimeArea);
+//         }, 29000)
+//         setTimeout(function () {
+//             starWarsTheme.play();
+//             playIntroCrawl();
+//         }, 30000);
+//         setTimeout(function () {
+//             myFadeOut(crawlArea);
+//         }, 114000);
+//         setTimeout(function () {
+//             myFadeIn(playText);
+//         }, 115000);
+//     }
 // });
-
-enterSection.addEventListener('click', function () {
-    myFadeOut(titleArea);
-    setTimeout(function(){
-        myFadeIn(introArea);
-    }, 1000)
-    setTimeout(function () {
-        myFadeIn(productionArea);
-    }, 1500);
-    foxIntro.play();
-    setTimeout(function () {
-        myFadeOut(productionArea)
-    }, 20500);
-    setTimeout(function () {
-        myFadeIn(longTimeArea);
-    }, 22000)
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        setTimeout(function () {
-            myFadeIn(continueButton);
-        }, 29000)
-        continueButton.addEventListener('click', function () {
-            starWarsTheme.play();
-            myFadeOut(longTimeArea);
-            setTimeout(function () {
-                playIntroCrawl();
-            }, 1000);
-            setTimeout(function () {
-                myFadeOut(crawlArea);
-            }, 84000);
-            setTimeout(function () {
-                myFadeIn(playText);
-            }, 85000);
-        });
-    } else {
-        setTimeout(function () {
-            myFadeOut(longTimeArea);
-        }, 29000)
-        setTimeout(function () {
-            starWarsTheme.play();
-            playIntroCrawl();
-        }, 30000);
-        setTimeout(function () {
-            myFadeOut(crawlArea);
-        }, 114000);
-        setTimeout(function () {
-            myFadeIn(playText);
-        }, 115000);
-    }
-});
 
 playText.addEventListener('click', function () {
     starWarsTheme.pause();
@@ -678,11 +688,19 @@ let startGame = () => {
     getScoreBoard();
     getLevel();
     getCompletedLevel();
-    if (level === '2') {
-        returnOfTheJedi.play();
-    } else if (level === '1') {
-        imperialMarch.play()
-    }
+
+
+/// dev mode
+
+    // if (level === '2') {
+    //     returnOfTheJedi.play();
+    // } else if (level === '1') {
+    //     imperialMarch.play()
+    // }
+
+
+
+
     // The x position of Galactic Defender
     galacticDefenderXPosition = 0;
     galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
