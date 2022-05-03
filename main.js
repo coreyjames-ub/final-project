@@ -45,6 +45,7 @@ let laserSpeedInterval = 35;
 let tieFighterInvasionSpeedInterval = 400;
 let tieFighterInvasionCreationInterval = 4000;
 let xWingVelocity = 1.5;
+let tieMult = 2;
 
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
@@ -110,18 +111,24 @@ let getScoreBoard = () => {
 let getLevel = () => {
     level = localStorage.getItem('level');
     if (level === null) {
-        level = 1;
+        level = '1';
         localStorage.setItem('level', level);
-    } else if (level === 1) {
-        laserSpeedInterval = 35;
-        tieFighterInvasionSpeedInterval = 500;
-        tieFighterInvasionCreationInterval = 5000;
-        xWingVelocity = 1;
-    } else if (level === 2) {
-        laserSpeedInterval = 25;
-        tieFighterInvasionSpeedInterval = 400;
-        tieFighterInvasionCreationInterval = 4000;
+    }
+    if (level === '1') {
+        console.log('inside level 1')
+        laserSpeedInterval = 30;
+        tieFighterInvasionSpeedInterval = 300;
+        tieFighterInvasionCreationInterval = 3000;
         xWingVelocity = 2;
+        tieMult = 2;
+    }
+
+    if (level === '2') {
+        laserSpeedInterval = 10;
+        tieFighterInvasionSpeedInterval = 260;
+        tieFighterInvasionCreationInterval = 2600;
+        xWingVelocity = 3.5;
+        tieMult = 4;
     }
     console.log('level');
     console.log(level);
@@ -130,8 +137,7 @@ let getLevel = () => {
 let getCompletedLevel = () => {
     completedLevel = localStorage.getItem('completedLevel');
     if (completedLevel === null) {
-        console.log('completed level working?');
-        completedLevel = 0;
+        completedLevel = '0';
         localStorage.setItem('completedLevel', completedLevel);
         let x = localStorage.getItem('completedLevel');
         console.log('x');
@@ -144,74 +150,69 @@ let getCompletedLevel = () => {
 // EVENT LISTENERS
 
 //DEV MODE
-enterSection.addEventListener('click', function () {
-    myFadeOut(titleArea);
-    setTimeout(function () {
-        myFadeIn(introArea);
-        trailerArea.style.display = 'flex'
-        playText.style.display = 'flex'
-    }, 1000)
-});
-
 // enterSection.addEventListener('click', function () {
 //     myFadeOut(titleArea);
-//     setTimeout(function(){
+//     setTimeout(function () {
 //         myFadeIn(introArea);
+//         trailerArea.style.display = 'flex'
+//         playText.style.display = 'flex'
 //     }, 1000)
-//     setTimeout(function () {
-//         myFadeIn(productionArea);
-//     }, 1500);
-//     foxIntro.play();
-//     setTimeout(function () {
-//         myFadeOut(productionArea)
-//     }, 20500);
-//     setTimeout(function () {
-//         myFadeIn(longTimeArea);
-//     }, 22000)
-//     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-//         setTimeout(function () {
-//             myFadeIn(continueButton);
-//         }, 29000)
-//         continueButton.addEventListener('click', function () {
-//             starWarsTheme.play();
-//             myFadeOut(longTimeArea);
-//             setTimeout(function () {
-//                 playIntroCrawl();
-//             }, 1000);
-//             setTimeout(function () {
-//                 myFadeOut(crawlArea);
-//             }, 84000);
-//             setTimeout(function () {
-//                 myFadeIn(playText);
-//             }, 85000);
-//         });
-//     } else {
-//         setTimeout(function () {
-//             myFadeOut(longTimeArea);
-//         }, 29000)
-//         setTimeout(function () {
-//             starWarsTheme.play();
-//             playIntroCrawl();
-//         }, 30000);
-//         setTimeout(function () {
-//             myFadeOut(crawlArea);
-//         }, 114000);
-//         setTimeout(function () {
-//             myFadeIn(playText);
-//         }, 115000);
-//     }
 // });
+
+enterSection.addEventListener('click', function () {
+    myFadeOut(titleArea);
+    setTimeout(function(){
+        myFadeIn(introArea);
+    }, 1000)
+    setTimeout(function () {
+        myFadeIn(productionArea);
+    }, 1500);
+    foxIntro.play();
+    setTimeout(function () {
+        myFadeOut(productionArea)
+    }, 20500);
+    setTimeout(function () {
+        myFadeIn(longTimeArea);
+    }, 22000)
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        setTimeout(function () {
+            myFadeIn(continueButton);
+        }, 29000)
+        continueButton.addEventListener('click', function () {
+            starWarsTheme.play();
+            myFadeOut(longTimeArea);
+            setTimeout(function () {
+                playIntroCrawl();
+            }, 1000);
+            setTimeout(function () {
+                myFadeOut(crawlArea);
+            }, 84000);
+            setTimeout(function () {
+                myFadeIn(playText);
+            }, 85000);
+        });
+    } else {
+        setTimeout(function () {
+            myFadeOut(longTimeArea);
+        }, 29000)
+        setTimeout(function () {
+            starWarsTheme.play();
+            playIntroCrawl();
+        }, 30000);
+        setTimeout(function () {
+            myFadeOut(crawlArea);
+        }, 114000);
+        setTimeout(function () {
+            myFadeIn(playText);
+        }, 115000);
+    }
+});
 
 playText.addEventListener('click', function () {
     starWarsTheme.pause();
     starWarsTheme.currentTime = 0;
     myFadeOut(introArea);
     setTimeout(function () {
-        if (completedLevel == 1) {
-            returnOfTheJedi.play();
-        } else {
-            imperialMarch.play()
-        }
         myFadeIn(gameArea);
         startGame();
         window.addEventListener("keydown", userArrow);
@@ -220,29 +221,6 @@ playText.addEventListener('click', function () {
             tieFighterInvasion(myTieFighterInvasionInterval)
         }, tieFighterInvasionCreationInterval);
     }, 1000);
-    // if (level == 1) {
-    //     setTimeout(function () {
-    //         tieFighterInvasionCreationInterval = 4000;
-    //         tieFighterInvasionSpeedInterval = 400;
-    //         laserSpeedInterval = 25;
-    //         xWingVelocity = 2;
-    //     }, 63000);
-    //     setTimeout(function () {
-    //         tieFighterInvasionCreationInterval = 3500;
-    //         tieFighterInvasionSpeedInterval = 350;
-    //         laserSpeedInterval = 20;
-    //         xWingVelocity = 2.5;
-    //     }, 125000);
-    //     setTimeout(function () {
-    //         gamePlayEnded = true;
-    //         localStorage.setItem('gamePlayEnded', gamePlayEnded);
-    //         invaded = false;
-    //         localStorage.setItem('invaded', invaded);
-    //         completedLevel = 1;
-    //         localStorage.setItem('completedLevel', 1);
-    //         displayGamePlayEndedArea();
-    //     },187000)
-    // }
 });
 
 reboot.addEventListener('click', function () {
@@ -250,12 +228,12 @@ reboot.addEventListener('click', function () {
 })
 
 playAgain.addEventListener('click', function () {
-    if (completedLevel == 1) {
+    if (completedLevel == '1') {
         levelOneComplete.pause();
         levelOneComplete.currentTime = 0;
-    } else if (completedLevel == 2) {
-        localStorage.setItem('level', 0);
-        localStorage.setItem('completedLevel', 0);
+    } else if (completedLevel == '2') {
+        localStorage.setItem('level', '0');
+        localStorage.setItem('completedLevel', '0');
         ewokCelebration.pause();
         ewokCelebration.currentTime = 0;
     } else {
@@ -268,7 +246,7 @@ playAgain.addEventListener('click', function () {
     localStorage.setItem('score', score);
     myFadeOut(restartArea);
     setTimeout(function () {
-        if (completedLevel == 1) {
+        if (completedLevel == '1') {
             returnOfTheJedi.play();
         } else {
             imperialMarch.play()
@@ -345,14 +323,18 @@ let tieFighterInvasion = (myTieFighterInvasionInterval) => {
         return;
     }
 
-    let tieFighterId = generateId();
-    let tieFighterDom = createTieFighterDom(tieFighterId);
-    initialTieFighterXPosition(tieFighterDom, tieFighterId);
-    initialTieFighterYPosition(tieFighterDom, tieFighterId);
+    for (let i = 0; i < tieMult; i++) {
+        let tieFighterId = generateId();
+        let tieFighterDom = createTieFighterDom(tieFighterId);
+        initialTieFighterXPosition(tieFighterDom, tieFighterId);
+        initialTieFighterYPosition(tieFighterDom, tieFighterId);
 
-    let myTieFighterMoveInterval = setInterval(function () {
-        moveTieFighter(tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval);
-    }, tieFighterInvasionSpeedInterval);
+        let myTieFighterMoveInterval = setInterval(function () {
+            moveTieFighter(tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval);
+        }, tieFighterInvasionSpeedInterval);
+    }
+
+
 }
 
 
@@ -424,7 +406,7 @@ let moveLaser = (laserDom, laserId, myLaserInterval) => {
             laserYPostion <= tieFighterObject[tieFighterId].tieFighterYPosition + 5) {
             tieFighterExplosion.pause();
             tieFighterExplosion.currentTime = 0;
-            setTimeout(function(){
+            setTimeout(function () {
                 tieFighterExplosion.play();
             }, 10)
             let tieDom = document.getElementById(tieFighterId);
@@ -458,17 +440,25 @@ let explodeTieFighter = (left, top) => {
 
 let displayGamePlayEndedArea = () => {
     if (gamePlayEnded == true) {
+        console.log(level);
+        if (level === '1') {
+            imperialMarch.pause();
+            imperialMarch.currentTime = 0;
+        } else if (level === '2') {
+            returnOfTheJedi.pause();
+            returnOfTheJedi.currentTime = 0;
+        }
 
         myFadeIn(gamePlayEndArea);
         gamePlayEndArea.style.alignItems = 'flex-start';
         gamePlayEndArea.style.justifyContent = 'flex-start';
-        if (invaded == true) {
+        if (invaded === true) {
             typeText(gamePlayEndText, invadedText);
             invadedFinale.play();
-        } else if (completedLevel = 1) {
+        } else if (completedLevel === '1') {
             typeText(gamePlayEndText, completedLevelOneText);
             levelOneComplete.play();
-        } else if (completedLevel = 2) {
+        } else if (completedLevel === '2') {
             typeText(gamePlayEndText, completedLevelTwoText);
             ewokCelebration.play();
         }
@@ -503,43 +493,57 @@ let displayGamePlayEndedArea = () => {
             specialText = "You did alright Kid.\nWhat do you say?\nLet's give it another shot!"
             for (let i = 0; i < scoreBoard.length; i++) {
                 topScoreText = topScoreText + "\n" + (i + 1) + ". " + scoreBoard[i] + " pts";
-                if (score == scoreBoard[i]) {
+                if (score === scoreBoard[i]) {
                     specialText = 'Congratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
                 };
             };
-            if (scoreBoard[0] == score) {
+            if (scoreBoard[0] === score) {
                 specialText = 'Congratulations!\nYour Score of ' + score + ' pts\nis the new High Score!';
             };
             topScoreText = topScoreText + '\n' + specialText;
-            if (completedLevel == 1) {
+            if (completedLevel === '1') {
                 topScoreText = topScoreText + '\nLooks like more\nTIE Fighters are\nin enroute.\nThey need us\nout there . . . .'
-            } else if (completedLevel == 2) {
+            } else if (completedLevel === '2') {
                 topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
-            } else if (invaded == true){
-                topScoreText = topScoreText + '\nCome on Kid.\nWe got to\nkeep fighting!'
+            } else if (invaded === true) {
+                topScoreText = topScoreText + '\nCome on Kid.\nWe have got to\nkeep fighting!'
             }
             typeText(scoreBoardText, topScoreText);
         }, 18000);
         setTimeout(function () {
             myFadeOut(gamePlayEndArea);
-        }, 29000);
+        }, 34000);
         setTimeout(function () {
             scoreBoardText.style.display = 'none';
             scoreBoardText.innerText = '';
             gamePlayEndArea.style.display = 'none';
             restartArea.style.display = 'flex';
-            if (invaded == true) {
+            console.log('invaded ..')
+            console.log(invaded);
+            console.log('completed leve')
+            console.log(completedLevel)
+            console.log('level of play')
+            console.log(level);
+            if (invaded === true) {
                 playAgain.innerText = "Play Again";
-                
-            } else {
+
+            }
+            if (completedLevel === '1') {
                 playAgain.innerText = "Continue";
+            }
+            if (completedLevel === '2') {
+                playAgain.innerText = "Play Again"
+                // completedLevel = '2';
+                localStorage.setItem('completedLevel', completedLevel);
+                // level = '2';
+                localStorage.setItem('level', level);
             }
             myFadeIn(restartArea);
             myFadeIn(playAgain);
-        }, 31000);
+        }, 36000);
         setTimeout(function () {
             myFadeIn(reboot);
-        }, 33000);
+        }, 37000);
     }
 }
 
@@ -547,23 +551,45 @@ let updateScoreBoard = () => {
     let newScoreBoard = [];
     let newScore = score;
     if (scoreBoard.length === 0) {
+        console.log('score board empty')
         scoreBoard.push(score);
         localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
         return;
     }
     for (let i = 0; i < scoreBoard.length + 1; i++) {
+        console.log('inside for loop');
         if (i === 5) {
-            break;
-        }
-        if (scoreBoard[i] == null) {
+            console.log('i = 5')
             break;
         }
         if (newScore > scoreBoard[i]) {
+            console.log('new score is greater than scoreboard[i}');
             newScoreBoard.push(newScore);
+            console.log('new score board')
+            console.log(newScoreBoard);
             newScore = scoreBoard[i];
-        } else {
+            console.log('new score become score[i]')
+        }
+
+        if (newScore < scoreBoard[i]) {
+            console.log('og score is greater than new')
+            console.log('og')
+            console.log(scoreBoard[i]);
+            console.log('new score')
+            console.log('new score')
             newScoreBoard.push(scoreBoard[i]);
         }
+
+        if ((i + 1) > scoreBoard.length) {
+            console.log('in here?')
+            newScoreBoard.push(newScore);
+            break;
+        }
+
+        // if (scoreBoard.length < 5 && i < 4){
+        //     newScoreBoard.push(newScore);
+        //     break;
+        // }
     }
     scoreBoard = newScoreBoard;
     localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
@@ -593,7 +619,7 @@ let fireLasers = (event) => {
         //LEFT LASER
         let leftLaserId = generateId()
         let leftLaserDom = createLaserDom(leftLaserId);
-        initialLaserXPosition(leftLaserDom, leftLaserId, 0);
+        initialLaserXPosition(leftLaserDom, leftLaserId, 0.05);
         initialLaserYPosition(leftLaserDom, leftLaserId);
         growLaserHeight(leftLaserDom);
         let myLeftLaserInterval = setInterval(function () {
@@ -603,7 +629,7 @@ let fireLasers = (event) => {
         //RIGHT LASER
         let rightLaserId = generateId()
         let rightLaserDom = createLaserDom(rightLaserId);
-        initialLaserXPosition(rightLaserDom, rightLaserId, 4.5);
+        initialLaserXPosition(rightLaserDom, rightLaserId, 4.45);
         initialLaserYPosition(rightLaserDom, rightLaserId);
         growLaserHeight(rightLaserDom);
         let myRightLaserInterval = setInterval(function () {
@@ -648,60 +674,92 @@ let startGame = () => {
     getScoreBoard();
     getLevel();
     getCompletedLevel();
+    if (level === '2') {
+        returnOfTheJedi.play();
+    } else if (level === '1') {
+        imperialMarch.play()
+    }
     // The x position of Galactic Defender
     galacticDefenderXPosition = 0;
     galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
     // displayGamePlayEndedArea();
-    if (level == 1) {
-        setTimeout(function () {
-            console.log('IS IT GOING FASTER???')
-            tieFighterInvasionCreationInterval = 2000;
-            tieFighterInvasionSpeedInterval = 200;
-            laserSpeedInterval = 25;
-            xWingVelocity = 2;
-        }, 63000);
-        setTimeout(function () {
-            tieFighterInvasionCreationInterval = 1000;
-            tieFighterInvasionSpeedInterval = 100;
-            laserSpeedInterval = 15;
+    if (level === '1') {
+        let myLevelOneTimeOutOne = setTimeout(function () {
+            if (invaded === true){
+                clearTimeout(myLevelOneTimeOutOne);
+            }
+            console.log('inside level 1 faster')
+            laserSpeedInterval = 20;
+            tieFighterInvasionSpeedInterval = 280;
+            tieFighterInvasionCreationInterval = 2800;
             xWingVelocity = 3;
+            tieMult = 3;
+        }, 63000);
+        let myLevelOneTimeOutTwo = setTimeout(function () {
+            if (invaded === true){
+                clearTimeout(myLevelOneTimeOutTwo);
+            }
+            console.log('inside level 1 fastest')
+            laserSpeedInterval = 15;
+            tieFighterInvasionSpeedInterval = 270;
+            tieFighterInvasionCreationInterval = 2700;
+            xWingVelocity = 3.5;
+            tieMult = 3;
         }, 125000);
-        setTimeout(function () {
+        let myLevelOneTimeOutThree = setTimeout(function () {
+            if (invaded === true){
+                clearTimeout(myLevelOneTimeOutThree)
+            }
+            console.log('almost done with level 1')
             gamePlayEnded = true;
             localStorage.setItem('gamePlayEnded', gamePlayEnded);
             invaded = false;
             localStorage.setItem('invaded', invaded);
-            completedLevel = 1;
+            completedLevel = '1';
             localStorage.setItem('completedLevel', completedLevel);
-            level = 2;
+            level = '2';
             localStorage.setItem('level', level);
             displayGamePlayEndedArea();
         }, 187000)
-    } else if (level == 2) {
-        setTimeout(function () {
-            tieFighterInvasionCreationInterval = 800;
-            tieFighterInvasionSpeedInterval = 80;
-            laserSpeedInterval = 15;
-            xWingVelocity = 3;
-        }, 90000);
-        setTimeout(function () {
-            tieFighterInvasionCreationInterval = 500;
-            tieFighterInvasionSpeedInterval = 50;
+    }
+
+    if (level === '2') {
+        let myLevelTwoTimeOutOne = setTimeout(function () {
+            if (invaded === true){
+                clearTimeout(myLevelTwoTimeOutOne)
+            }
             laserSpeedInterval = 10;
+            tieFighterInvasionSpeedInterval = 260;
+            tieFighterInvasionCreationInterval = 2600;
+            xWingVelocity = 3.5;
+            tieMult = 4;
+        }, 90000);
+        let myLevelTwoTimeOutTwo = setTimeout(function () {
+            if (invaded === true){
+                clearTimeout(myLevelTwoTimeOutTwo)
+            }
+            laserSpeedInterval = 8;
+            tieFighterInvasionSpeedInterval = 250;
+            tieFighterInvasionCreationInterval = 2500;
             xWingVelocity = 4;
+            tieMult = 4;
         }, 180000);
-        setTimeout(function () {
-            gamePlayEnded = true;
-            localStorage.setItem('gamePlayEnded', gamePlayEnded);
-            invaded = false;
-            localStorage.setItem('invaded', invaded);
-            completedLevel = 2;
-            localStorage.setItem('completedLevel', completedLevel);
-            level = 2;
-            localStorage.setItem('level', level);
-            displayGamePlayEndedArea();
+        let myLevelTwoTimeOutThree = setTimeout(function () {
+            if(invaded === true){
+                clearTimeout(myLevelTwoTimeOutThree);
+            }
+                gamePlayEnded = true;
+                localStorage.setItem('gamePlayEnded', gamePlayEnded);
+                invaded = false;
+                localStorage.setItem('invaded', invaded);
+                completedLevel = '2';
+                localStorage.setItem('completedLevel', completedLevel);
+                level = '2';
+                localStorage.setItem('level', level);
+                displayGamePlayEndedArea();
         }, 303000)
     }
+
 }
 
 let refreshReboot = () => {
