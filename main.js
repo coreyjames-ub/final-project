@@ -506,7 +506,7 @@ let displayGamePlayEndedArea = () => {
             } else if (completedLevel === '2') {
                 topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
             } else if (invaded === true) {
-                topScoreText = topScoreText + '\nCome on Kid.\nWe have got to\nkeep fighting!'
+                topScoreText = topScoreText + '\nCome on Kid.\nWe have keep fighting!'
             }
             typeText(scoreBoardText, topScoreText);
         }, 18000);
@@ -685,7 +685,7 @@ let startGame = () => {
     // displayGamePlayEndedArea();
     if (level === '1') {
         let myLevelOneTimeOutOne = setTimeout(function () {
-            if (invaded === true){
+            if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelOneTimeOutOne);
             }
             console.log('inside level 1 faster')
@@ -696,7 +696,7 @@ let startGame = () => {
             tieMult = 3;
         }, 63000);
         let myLevelOneTimeOutTwo = setTimeout(function () {
-            if (invaded === true){
+            if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelOneTimeOutTwo);
             }
             console.log('inside level 1 fastest')
@@ -707,7 +707,7 @@ let startGame = () => {
             tieMult = 3;
         }, 125000);
         let myLevelOneTimeOutThree = setTimeout(function () {
-            if (invaded === true){
+            if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelOneTimeOutThree)
             }
             console.log('almost done with level 1')
@@ -725,7 +725,7 @@ let startGame = () => {
 
     if (level === '2') {
         let myLevelTwoTimeOutOne = setTimeout(function () {
-            if (invaded === true){
+            if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelTwoTimeOutOne)
             }
             laserSpeedInterval = 10;
@@ -735,7 +735,7 @@ let startGame = () => {
             tieMult = 4;
         }, 90000);
         let myLevelTwoTimeOutTwo = setTimeout(function () {
-            if (invaded === true){
+            if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelTwoTimeOutTwo)
             }
             laserSpeedInterval = 8;
@@ -745,7 +745,7 @@ let startGame = () => {
             tieMult = 4;
         }, 180000);
         let myLevelTwoTimeOutThree = setTimeout(function () {
-            if(invaded === true){
+            if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelTwoTimeOutThree);
             }
                 gamePlayEnded = true;
