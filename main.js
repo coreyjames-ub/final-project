@@ -20,6 +20,7 @@ let hollowStarWarsText = document.querySelector('#hollowStarWarsText');
 let continueButton = document.querySelector('#continueButton');
 let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
+let tagLineTwo = document.querySelector('#tagLineTwo');
 let gameArea = document.querySelector('#gameArea');
 let galacticDefender = document.querySelector('#galacticDefender');
 let gamePlayEndArea = document.querySelector('#gamePlayEndArea');
@@ -207,6 +208,9 @@ enterSection.addEventListener('click', function () {
             setTimeout(function () {
                 myFadeIn(playText);
             }, 85000);
+            setTimeout(function(){
+                myFadeIn(tagLineTwo);
+            },86000)
         });
     } else {
         setTimeout(function () {
@@ -222,6 +226,9 @@ enterSection.addEventListener('click', function () {
         setTimeout(function () {
             myFadeIn(playText);
         }, 115000);
+        setTimeout(function(){
+            myFadeIn(tagLineTwo);
+        },116000)
     }
 });
 
@@ -362,10 +369,7 @@ let tieFighterInvasion = (myTieFighterInvasionInterval) => {
             moveTieFighter(tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval);
         }, tieFighterInvasionSpeedInterval);
     }
-
-
 }
-
 
 let generateId = () => {
     let laserId = Math.ceil(Math.random() * 1000000);
@@ -468,7 +472,6 @@ let explodeTieFighter = (left, top) => {
     explosionDom.style.top = top + 'vh';
     return explosionDom;
 }
-
 
 let displayGamePlayEndedArea = () => {
     if (gamePlayEnded == true) {
@@ -617,11 +620,6 @@ let updateScoreBoard = () => {
             newScoreBoard.push(newScore);
             break;
         }
-
-        // if (scoreBoard.length < 5 && i < 4){
-        //     newScoreBoard.push(newScore);
-        //     break;
-        // }
     }
     scoreBoard = newScoreBoard;
     localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
@@ -708,7 +706,6 @@ let fireLasers = (event) => {
         }, laserSpeedInterval);
 
         xWingFire.play();
-
     }
 }
 
@@ -768,23 +765,14 @@ let startGame = () => {
     getScoreBoard();
     getLevel();
     getCompletedLevel();
-
-
-    /// dev mode
-
-    // if (level === '2') {
-    //     returnOfTheJedi.play();
-    // } else if (level === '1') {
-    //     imperialMarch.play()
-    // }
-
-
-
-
+    if (level === '2') {
+        returnOfTheJedi.play();
+    } else if (level === '1') {
+        imperialMarch.play()
+    }
     // The x position of Galactic Defender
     galacticDefenderXPosition = 0;
     galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
-    // displayGamePlayEndedArea();
 }
 
 let playLevelOne = () => {
