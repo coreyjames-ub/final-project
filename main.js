@@ -21,14 +21,14 @@ let gamePlayScoreText = document.querySelector('#gamePlayScoreText');
 let scoreBoardText = document.querySelector('#scoreBoardText');
 let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
-let restartArea = document.querySelector('#restartArea')
+let restartArea = document.querySelector('#restartArea');
 
 
 // GAME VARIABLES
 let score;
 let gamePlayEnded;
 let invaded;
-let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded.\n"
+let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
 let scoreBoard;
 let level;
 
@@ -349,8 +349,8 @@ let displayGamePlayEndedArea = () => {
         }, 7000);
         setTimeout(function(){
             gamePlayEndText.style.display = 'none';
-            gamePlayEndArea.style.display = 'none';
-            let scoreText = "Score: "+ score +" pts";
+            // gamePlayEndArea.style.display = 'none';
+            let scoreText = `Score: ${score} pts`;
             gamePlayEndArea.style.top = '30vh';
             gamePlayEndArea.style.left = '30vw';
             gamePlayEndArea.style.display = 'flex';
@@ -368,13 +368,11 @@ let displayGamePlayEndedArea = () => {
             gamePlayEndArea.style.display = 'flex';
             gamePlayEndArea.style.opacity = 1;
             updateScoreBoard();
-            let madeLeaderBoard = false;
             let specialText = '';
             let topScoreText = "Top Scores:"
             for (let i = 0; i < scoreBoard.length; i++){
                 topScoreText = topScoreText + "\n" + (i+1) + ". " + scoreBoard[i] + " pts";
                 if (scoreBoard[i] == score){
-                    madeLeaderBoard = true;
                     specialText = 'Congratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
                 } else {
                     specialText = "You did alright Kid.\nWhat do you say?\nLet's give it another shot!"
@@ -392,8 +390,12 @@ let displayGamePlayEndedArea = () => {
         setTimeout(function(){
             scoreBoardText.style.display = 'none';
             gamePlayEndArea.style.display = 'none';
-            myFadeIn(restartArea);
+            restartArea.style.display = 'flex';
+            myFadeIn(playAgain);
         }, 26000);
+        setTimeout(function(){
+            myFadeIn(reboot);
+        }, 28000);
         
 
     }
@@ -548,6 +550,7 @@ let myShrinkText = (dom) => {
 }
 
 let typeText = (dom, str) => {
+    dom.style.display = 'flex'
     let strB = ''
     let i = 0;
     let myTypeInterval = setInterval(function () {

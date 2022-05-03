@@ -18,17 +18,27 @@ body {
   overflow: hidden;
 }
 
+#gamePlayScoreText{
+    display: none;
+}
+
+#scoreBoardText{
+    display: none;
+}
+
+
 .typeText {
   color: white;
   font-family: "Black Ops One";
   font-size: 2.8vw;
-  margin: 2.3vw;
+  margin: 2vw;
   padding: 0;
   letter-spacing: 0.5vw;
 }
 
 #gamePlayEndArea {
   display: none;
+  flex-direction: column;
   position: absolute;
   height: fit-content;
   width: fit-content;
@@ -39,15 +49,26 @@ body {
   z-index: 2;
 }
 
+#reboot {
+  display: none;
+  color: white;
+  font-family: Lora;
+  font-size: 3vw;
+  letter-spacing: 1vw;
+  margin-top: 3vh;
+  padding: 0;
+}
+
 #restartArea {
   display: none;
+  flex-direction: column;
   position: absolute;
   height: fit-content;
   width: fit-content;
-  box-shadow: 0 12px 50px 0 skyblue, 0 -10px 500px 0 skyblue;
-  background-color: rgba(0, 0, 0, 0.89);
-  top: 12vh;
-  left: 20vw;
+  /* box-shadow: 0 12px 50px 0 skyblue, 0 -10px 500px 0 skyblue; */
+  /* background-color: rgba(0, 0, 0, 0.89); */
+  top: 18vh;
+  left: 14vw;
   z-index: 2;
 }
 
