@@ -91,14 +91,20 @@ let getScoreBoard = () => {
     console.log(scoreBoard);
 }
 
+let getLevel = () => {
+    level = Number(localStorage.getItem('level'));
+    if (level === null){
+        level = 1;
+        localStorage.setItem('level', level);
+    }
+    console.log('level');
+    console.log(level);
+}
+
 // EVENT LISTENERS
 
 //DEV MODE
 enterSection.addEventListener('click', function () {
-    getScore();
-    getGamePlayEnded();
-    getInvaded();
-    getScoreBoard();
     myFadeOut(titleArea);
     setTimeout(function () {
         myFadeIn(introArea);
@@ -168,6 +174,32 @@ playText.addEventListener('click', function () {
         }, 5000);
     }, 1000);
 
+});
+
+playAgain.addEventListener('click', function(){
+    for (let tieFighterId in tieFighterObject){
+        let tieDom = document.getElementById(tieFighterId);
+        tieDom.remove();
+        delete tieFighterObject[tieFighterId];
+    }
+    for (let laserId in laserObject){
+        let laserDom = document.getElementById(laserId);
+        laserDom.remove();
+        delete laserObject[laserId];
+    }
+    gamePlayEnded = false;
+    localStorage.setItem('gamePlayEnded', gamePlayEnded);
+    score = 0;
+    localStorage.setItem('score', score);
+    myFadeOut(restartArea);
+    setTimeout(function(){
+        playAgain.style.display = 'none';
+        reboot.style.display = 'none'
+        startGame();
+        let myTieFighterInvasionInterval = setInterval(function () {
+            tieFighterInvasion(myTieFighterInvasionInterval)
+        }, 5000);
+    }, 1000)
 })
 
 // HELPER FUNCTIONS
@@ -331,13 +363,9 @@ let explodeTieFighter = (left, top) => {
 }
 
 
-
-
-
-
-
 let displayGamePlayEndedArea = () => {
     if (gamePlayEnded == true) {
+        
         myFadeIn(gamePlayEndArea);
         gamePlayEndArea.style.alignItems = 'flex-start';
         gamePlayEndArea.style.justifyContent = 'flex-start';
@@ -349,7 +377,8 @@ let displayGamePlayEndedArea = () => {
         }, 7000);
         setTimeout(function(){
             gamePlayEndText.style.display = 'none';
-            // gamePlayEndArea.style.display = 'none';
+            gamePlayEndText.innerText = '';
+            gamePlayEndArea.style.display = 'none';
             let scoreText = `Score: ${score} pts`;
             gamePlayEndArea.style.top = '30vh';
             gamePlayEndArea.style.left = '30vw';
@@ -362,25 +391,25 @@ let displayGamePlayEndedArea = () => {
         }, 14000);
         setTimeout(function(){
             gamePlayScoreText.style.display = 'none';
+            gamePlayScoreText.innerText = '';
             gamePlayEndArea.style.display = 'none';
             gamePlayEndArea.style.top = '12vh';
-            gamePlayEndArea.style.left = '20vw';
+            gamePlayEndArea.style.left = '25vw';
             gamePlayEndArea.style.display = 'flex';
             gamePlayEndArea.style.opacity = 1;
             updateScoreBoard();
             let specialText = '';
             let topScoreText = "Top Scores:"
+            specialText = "You did alright Kid.\nWhat do you say?\nLet's give it another shot!"
             for (let i = 0; i < scoreBoard.length; i++){
                 topScoreText = topScoreText + "\n" + (i+1) + ". " + scoreBoard[i] + " pts";
-                if (scoreBoard[i] == score){
+                if (score == scoreBoard[i]){
                     specialText = 'Congratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
-                } else {
-                    specialText = "You did alright Kid.\nWhat do you say?\nLet's give it another shot!"
-                }
-            }
+                };
+            };
             if (scoreBoard[0] == score){
                 specialText = 'Congratulations!\nYour Score of ' + score + ' pts\nis the new High Score!';
-            }
+            };
             topScoreText = topScoreText + '\n' + specialText;
             typeText(scoreBoardText, topScoreText);
         }, 16000);
@@ -389,31 +418,58 @@ let displayGamePlayEndedArea = () => {
         }, 24000);
         setTimeout(function(){
             scoreBoardText.style.display = 'none';
+            scoreBoardText.innerText = '';
             gamePlayEndArea.style.display = 'none';
             restartArea.style.display = 'flex';
             myFadeIn(playAgain);
         }, 26000);
         setTimeout(function(){
             myFadeIn(reboot);
-        }, 28000);
-        
-
+        }, 28000); 
     }
-
 }
 
 
 
 let updateScoreBoard = () => {
+    console.log('scoreBoard length');
+    console.log(scoreBoard.length);
     let newScoreBoard = [];
-    if (scoreBoard.length == 0){
+    let newScore = score;
+    console.log('new score');
+    console.log(newScore);
+    if (scoreBoard.length === 0){
         scoreBoard.push(score);
         localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
         return;
     }
-    for (let i = 0; i < scoreBoard.length; i++){
-
+    for (let i = 0; i < scoreBoard.length + 1; i++){
+        console.log('getting in the for loop?')
+        if (i === 5){
+            console.log('in the break statement')
+            break;
+        }
+        if (scoreBoard[i] == null){
+            console.log('we should break')
+            break;
+        }
+        if (newScore > scoreBoard[i]){
+            console.log('new score is greater than scoreboard sub i')
+            console.log(i);
+            console.log(scoreBoard[i]);
+            newScoreBoard.push(newScore);
+            newScore = scoreBoard[i];
+        } else {
+            console.log('in the else statement');
+            newScoreBoard.push(scoreBoard[i]);
+        }
     }
+    scoreBoard = newScoreBoard;
+    localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
+    console.log('hey this is the score');
+    console.log(score);
+    console.log('this is the new scoreboard');
+    console.log(scoreBoard)
 }
 
 
@@ -424,7 +480,6 @@ let tieFighterInvaded = () => {
     localStorage.setItem('gamePlayEnded', gamePlayEnded);
     invaded = true;
     localStorage.setItem('invaded', invaded);
-    console.log(gamePlayEnded);
     displayGamePlayEndedArea();
 }
 
@@ -484,7 +539,17 @@ let userArrow = (event) => {
 }
 
 let startGame = () => {
-
+    score = 0;
+    localStorage.setItem('score', 0);
+    gamePlayEnded = false;
+    localStorage.setItem('gamePlayEnded', false);
+    invaded = false;
+    localStorage.setItem('invaded', false);
+    getScore();
+    getGamePlayEnded();
+    getInvaded();
+    getScoreBoard();
+    getLevel();
     // The x position of Galactic Defender
     galacticDefenderXPosition = 0;
     galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
@@ -523,6 +588,7 @@ let myFadeOut = (dom) => {
         if (opacity <= 0) {
             clearInterval(myTimer);
             dom.style.display = 'none';
+            dom.style.opacity = 1;
         }
         dom.style.opacity = opacity;
         opacity = opacity - 0.1;
