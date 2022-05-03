@@ -215,6 +215,7 @@ playText.addEventListener('click', function () {
     setTimeout(function () {
         myFadeIn(gameArea);
         startGame();
+        playLevelOne();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
         let myTieFighterInvasionInterval = setInterval(function () {
@@ -683,10 +684,14 @@ let startGame = () => {
     galacticDefenderXPosition = 0;
     galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
     // displayGamePlayEndedArea();
+}
+
+let playLevelOne = () => {
     if (level === '1') {
         let myLevelOneTimeOutOne = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelOneTimeOutOne);
+                return;
             }
             console.log('inside level 1 faster')
             laserSpeedInterval = 20;
@@ -698,6 +703,7 @@ let startGame = () => {
         let myLevelOneTimeOutTwo = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelOneTimeOutTwo);
+                return;
             }
             console.log('inside level 1 fastest')
             laserSpeedInterval = 15;
@@ -709,6 +715,7 @@ let startGame = () => {
         let myLevelOneTimeOutThree = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelOneTimeOutThree)
+                return;
             }
             console.log('almost done with level 1')
             gamePlayEnded = true;
@@ -722,11 +729,14 @@ let startGame = () => {
             displayGamePlayEndedArea();
         }, 187000)
     }
+}
 
+let playLevelTwo = () => {
     if (level === '2') {
         let myLevelTwoTimeOutOne = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelTwoTimeOutOne)
+                return;
             }
             laserSpeedInterval = 10;
             tieFighterInvasionSpeedInterval = 260;
@@ -737,6 +747,7 @@ let startGame = () => {
         let myLevelTwoTimeOutTwo = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelTwoTimeOutTwo)
+                return;
             }
             laserSpeedInterval = 8;
             tieFighterInvasionSpeedInterval = 250;
@@ -747,6 +758,7 @@ let startGame = () => {
         let myLevelTwoTimeOutThree = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true){
                 clearTimeout(myLevelTwoTimeOutThree);
+                return;
             }
                 gamePlayEnded = true;
                 localStorage.setItem('gamePlayEnded', gamePlayEnded);
