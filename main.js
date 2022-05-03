@@ -31,7 +31,9 @@ let reboot = document.querySelector('#reboot');
 let restartArea = document.querySelector('#restartArea');
 let leftArrow = document.querySelector('#leftArrow');
 let rightArrow = document.querySelector('#rightArrow');
-let fireLaserMobile = document.querySelector('#fireLaserMobile')
+let fireLaser = document.querySelector('#fireLaserMobile');
+
+let isMobile = false;
 
 
 // GAME VARIABLES
@@ -153,70 +155,75 @@ let getCompletedLevel = () => {
 // EVENT LISTENERS
 
 // DEV MODE
+// enterSection.addEventListener('click', function () {
+//     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+// // this is for mobile.
+// isMobile = true;
+// window.scrollTo(0, 1);
+// gameArea.style.height = '100vh';
+// gameArea.style.width = '100vw';
+//     }
+//     myFadeOut(titleArea);
+//     setTimeout(function () {
+//         myFadeIn(introArea);
+//         trailerArea.style.display = 'flex'
+//         playText.style.display = 'flex'
+//     }, 1000)
+// });
+
 enterSection.addEventListener('click', function () {
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        gameArea.style.height = '100vh';
-        gameArea.style.width = '100vw';
-        
-    }
     myFadeOut(titleArea);
     setTimeout(function () {
         myFadeIn(introArea);
-        trailerArea.style.display = 'flex'
-        playText.style.display = 'flex'
     }, 1000)
+    setTimeout(function () {
+        myFadeIn(productionArea);
+    }, 1500);
+    foxIntro.play();
+    setTimeout(function () {
+        myFadeOut(productionArea)
+    }, 20500);
+    setTimeout(function () {
+        myFadeIn(longTimeArea);
+    }, 22000)
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // this is for mobile.
+        isMobile = true;
+        window.scrollTo(0, 1);
+        gameArea.style.height = '100vh';
+        gameArea.style.width = '100vw';
+        setTimeout(function () {
+            myFadeIn(continueButton);
+        }, 29000)
+        continueButton.addEventListener('click', function () {
+            starWarsTheme.play();
+            myFadeOut(longTimeArea);
+            setTimeout(function () {
+                playIntroCrawl();
+            }, 1000);
+            setTimeout(function () {
+                myFadeOut(crawlArea);
+            }, 84000);
+            setTimeout(function () {
+                myFadeIn(playText);
+            }, 85000);
+        });
+    } else {
+        setTimeout(function () {
+            myFadeOut(longTimeArea);
+        }, 29000)
+        setTimeout(function () {
+            starWarsTheme.play();
+            playIntroCrawl();
+        }, 30000);
+        setTimeout(function () {
+            myFadeOut(crawlArea);
+        }, 114000);
+        setTimeout(function () {
+            myFadeIn(playText);
+        }, 115000);
+    }
 });
-
-// enterSection.addEventListener('click', function () {
-//     myFadeOut(titleArea);
-    // setTimeout(function(){
-    //     myFadeIn(introArea);
-    // }, 1000)
-    // setTimeout(function () {
-    //     myFadeIn(productionArea);
-    // }, 1500);
-    // foxIntro.play();
-    // setTimeout(function () {
-    //     myFadeOut(productionArea)
-    // }, 20500);
-    // setTimeout(function () {
-        // myFadeIn(longTimeArea);
-    // }, 22000)
-    // if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    //     gameArea.style.height = '80vh';
-    //     gameArea.style.width = '80vw';
-//         setTimeout(function () {
-//             myFadeIn(continueButton);
-//         }, 29000)
-//         continueButton.addEventListener('click', function () {
-//             starWarsTheme.play();
-//             myFadeOut(longTimeArea);
-//             setTimeout(function () {
-//                 playIntroCrawl();
-//             }, 1000);
-//             setTimeout(function () {
-//                 myFadeOut(crawlArea);
-//             }, 84000);
-//             setTimeout(function () {
-//                 myFadeIn(playText);
-//             }, 85000);
-//         });
-//     } else {
-//         setTimeout(function () {
-//             myFadeOut(longTimeArea);
-//         }, 29000)
-//         setTimeout(function () {
-//             starWarsTheme.play();
-//             playIntroCrawl();
-//         }, 30000);
-//         setTimeout(function () {
-//             myFadeOut(crawlArea);
-//         }, 114000);
-//         setTimeout(function () {
-//             myFadeIn(playText);
-//         }, 115000);
-//     }
-// });
 
 playText.addEventListener('click', function () {
     starWarsTheme.pause();
@@ -229,6 +236,14 @@ playText.addEventListener('click', function () {
         playLevelTwo();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
+
+
+        leftArrow.addEventListener('click', leftMobileArrow);
+
+        rightArrow.addEventListener('click', rightMobileArrow);
+
+        fireLaser.addEventListener('click', fireLaserMobile);
+
         let myTieFighterInvasionInterval = setInterval(function () {
             tieFighterInvasion(myTieFighterInvasionInterval)
         }, tieFighterInvasionCreationInterval);
@@ -382,6 +397,9 @@ let initialLaserXPosition = (laserDom, laserId, xOffset) => {
 
 let initialLaserYPosition = (laserDom, laserId) => {
     let laserYPosition = 89;
+    if (isMobile == true) {
+        laserYPosition = 79;
+    }
     laserDom.style.top = laserYPosition + 'vh';
     laserObject[laserId].laserYPosition = laserYPosition;
 }
@@ -623,6 +641,45 @@ let addPointsOnHit = () => {
     console.log(score)
 };
 
+let fireLaserMobile = () => {
+
+    // I kinda like that on mobile you can fire laser when gamePlayEnd is true
+
+    // if (gamePlayEnded == true) {
+    //     return;
+    // }
+
+    xWingFire.pause();
+    xWingFire.currentTime = 0;
+    //LEFT LASER
+    let leftLaserId = generateId()
+    let leftLaserDom = createLaserDom(leftLaserId);
+    initialLaserXPosition(leftLaserDom, leftLaserId, 0.05);
+    initialLaserYPosition(leftLaserDom, leftLaserId);
+    growLaserHeight(leftLaserDom);
+    let myLeftLaserInterval = setInterval(function () {
+        moveLaser(leftLaserDom, leftLaserId, myLeftLaserInterval);
+    }, laserSpeedInterval);
+
+    //RIGHT LASER
+    let rightLaserId = generateId()
+    let rightLaserDom = createLaserDom(rightLaserId);
+    if (isMobile === true) {
+        console.log('is in mobile x offset for laser')
+        initialLaserXPosition(rightLaserDom, rightLaserId, 8.45);
+    } else {
+        initialLaserXPosition(rightLaserDom, rightLaserId, 4.45);
+    }
+
+    initialLaserYPosition(rightLaserDom, rightLaserId);
+    growLaserHeight(rightLaserDom);
+    let myRightLaserInterval = setInterval(function () {
+        moveLaser(rightLaserDom, rightLaserId, myRightLaserInterval);
+    }, laserSpeedInterval);
+
+    xWingFire.play();
+}
+
 let fireLasers = (event) => {
     if (gamePlayEnded == true) {
         return;
@@ -651,6 +708,29 @@ let fireLasers = (event) => {
         }, laserSpeedInterval);
 
         xWingFire.play();
+
+    }
+}
+
+let leftMobileArrow = () => {
+    if (gamePlayEnded == true) {
+        return;
+    }
+    if (galacticDefenderXPosition >= 1) {
+        galacticDefenderXVelocity = -(xWingVelocity);
+        galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
+        galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+    }
+}
+
+let rightMobileArrow = () => {
+    if (gamePlayEnded == true) {
+        return;
+    }
+    if (galacticDefenderXPosition <= 89) {
+        galacticDefenderXVelocity = xWingVelocity;
+        galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
+        galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
 
     }
 }
@@ -690,7 +770,7 @@ let startGame = () => {
     getCompletedLevel();
 
 
-/// dev mode
+    /// dev mode
 
     // if (level === '2') {
     //     returnOfTheJedi.play();
@@ -710,7 +790,7 @@ let startGame = () => {
 let playLevelOne = () => {
     if (level === '1') {
         let myLevelOneTimeOutOne = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true){
+            if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelOneTimeOutOne);
                 return;
             }
@@ -722,7 +802,7 @@ let playLevelOne = () => {
             tieMult = 3;
         }, 63000);
         let myLevelOneTimeOutTwo = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true){
+            if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelOneTimeOutTwo);
                 return;
             }
@@ -734,7 +814,7 @@ let playLevelOne = () => {
             tieMult = 3;
         }, 125000);
         let myLevelOneTimeOutThree = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true){
+            if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelOneTimeOutThree)
                 return;
             }
@@ -757,7 +837,7 @@ let playLevelOne = () => {
 let playLevelTwo = () => {
     if (level === '2') {
         let myLevelTwoTimeOutOne = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true){
+            if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelTwoTimeOutOne)
                 return;
             }
@@ -768,7 +848,7 @@ let playLevelTwo = () => {
             tieMult = 4;
         }, 90000);
         let myLevelTwoTimeOutTwo = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true){
+            if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelTwoTimeOutTwo)
                 return;
             }
@@ -779,19 +859,19 @@ let playLevelTwo = () => {
             tieMult = 4;
         }, 180000);
         let myLevelTwoTimeOutThree = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true){
+            if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelTwoTimeOutThree);
                 return;
             }
-                gamePlayEnded = true;
-                localStorage.setItem('gamePlayEnded', gamePlayEnded);
-                invaded = false;
-                localStorage.setItem('invaded', invaded);
-                completedLevel = '2';
-                localStorage.setItem('completedLevel', completedLevel);
-                level = '2';
-                localStorage.setItem('level', level);
-                displayGamePlayEndedArea();
+            gamePlayEnded = true;
+            localStorage.setItem('gamePlayEnded', gamePlayEnded);
+            invaded = false;
+            localStorage.setItem('invaded', invaded);
+            completedLevel = '2';
+            localStorage.setItem('completedLevel', completedLevel);
+            level = '2';
+            localStorage.setItem('level', level);
+            displayGamePlayEndedArea();
         }, 303000)
     } else {
         return;
