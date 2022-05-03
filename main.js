@@ -199,7 +199,7 @@ enterSection.addEventListener('click', function () {
             }, 85000);
             setTimeout(function () {
                 myFadeIn(tagLineTwo);
-            }, 86000)
+            }, 87000)
         });
     } else {
         setTimeout(function () {
@@ -218,7 +218,7 @@ enterSection.addEventListener('click', function () {
         playText.style.position = 'absolute';
         setTimeout(function () {
             myFadeIn(tagLineTwo);
-        }, 116000)
+        }, 117000)
     }
 });
 
