@@ -216,6 +216,7 @@ playText.addEventListener('click', function () {
         myFadeIn(gameArea);
         startGame();
         playLevelOne();
+        playLevelTwo();
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
         let myTieFighterInvasionInterval = setInterval(function () {
@@ -255,6 +256,8 @@ playAgain.addEventListener('click', function () {
         playAgain.style.display = 'none';
         reboot.style.display = 'none'
         startGame();
+        playLevelOne();
+        playLevelTwo();
         let myTieFighterInvasionInterval = setInterval(function () {
             tieFighterInvasion(myTieFighterInvasionInterval)
         }, tieFighterInvasionCreationInterval);
@@ -728,6 +731,8 @@ let playLevelOne = () => {
             localStorage.setItem('level', level);
             displayGamePlayEndedArea();
         }, 187000)
+    } else {
+        return;
     }
 }
 
@@ -770,6 +775,8 @@ let playLevelTwo = () => {
                 localStorage.setItem('level', level);
                 displayGamePlayEndedArea();
         }, 303000)
+    } else {
+        return;
     }
 
 }
