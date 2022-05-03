@@ -229,8 +229,12 @@ playText.addEventListener('click', function () {
     setTimeout(function () {
         myFadeIn(gameArea);
         startGame();
-        playLevelOne();
-        playLevelTwo();
+        if (level === '1'){
+            playLevelOne();
+        }
+        if (level === '2'){
+            playLevelTwo();
+        }
         window.addEventListener("keydown", userArrow);
         window.addEventListener('keydown', fireLasers);
         let myTieFighterInvasionInterval = setInterval(function () {
@@ -270,8 +274,12 @@ playAgain.addEventListener('click', function () {
         playAgain.style.display = 'none';
         reboot.style.display = 'none'
         startGame();
-        playLevelOne();
-        playLevelTwo();
+        if (level === '1'){
+            playLevelOne();
+        }
+        if (level === '2'){
+            playLevelTwo();
+        }
         let myTieFighterInvasionInterval = setInterval(function () {
             tieFighterInvasion(myTieFighterInvasionInterval)
         }, tieFighterInvasionCreationInterval);
@@ -697,6 +705,7 @@ let playLevelOne = () => {
         let myLevelOneTimeOutOne = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelOneTimeOutOne);
+                displayGamePlayEndedArea();
                 return;
             }
             console.log('inside level 1 faster')
@@ -709,6 +718,7 @@ let playLevelOne = () => {
         let myLevelOneTimeOutTwo = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelOneTimeOutTwo);
+                displayGamePlayEndedArea();
                 return;
             }
             console.log('inside level 1 fastest')
@@ -721,6 +731,7 @@ let playLevelOne = () => {
         let myLevelOneTimeOutThree = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelOneTimeOutThree)
+                displayGamePlayEndedArea();
                 return;
             }
             console.log('almost done with level 1')
@@ -744,8 +755,10 @@ let playLevelTwo = () => {
         let myLevelTwoTimeOutOne = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelTwoTimeOutOne)
+                displayGamePlayEndedArea();
                 return;
             }
+            console.log('inside lvl 2');
             laserSpeedInterval = 10;
             tieFighterInvasionSpeedInterval = 260;
             tieFighterInvasionCreationInterval = 2600;
@@ -754,9 +767,11 @@ let playLevelTwo = () => {
         }, 90000);
         let myLevelTwoTimeOutTwo = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelTwoTimeOutTwo)
+                clearTimeout(myLevelTwoTimeOutTwo);
+                displayGamePlayEndedArea();
                 return;
             }
+            console.log('inside lvl 2 faster');
             laserSpeedInterval = 8;
             tieFighterInvasionSpeedInterval = 250;
             tieFighterInvasionCreationInterval = 2500;
@@ -766,8 +781,10 @@ let playLevelTwo = () => {
         let myLevelTwoTimeOutThree = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
                 clearTimeout(myLevelTwoTimeOutThree);
+                displayGamePlayEndedArea();
                 return;
             }
+            console.log('almost done with lvl 2');
             gamePlayEnded = true;
             localStorage.setItem('gamePlayEnded', gamePlayEnded);
             invaded = false;
