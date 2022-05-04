@@ -179,7 +179,7 @@ body {
   background-color: black;
 }
 
-#tagLineTwo {
+.tagTwo {
   display: none;
   color: white;
   font-family: Lora;
@@ -189,6 +189,16 @@ body {
   padding: 0;
   position: absolute;
   top: 56vh;
+  text-align: center;
+}
+
+#gameArea {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  /* height: 95vh; */
+  /* width: 95vw; */
+  position: relative;
 }
 
 #gamePlayScoreText {
@@ -257,14 +267,7 @@ img {
 
 #galacticDefender {
   position: absolute;
-  top: 85vh;
-}
-
-#gameArea {
-  display: none;
-  height: 95vh;
-  width: 95vw;
-  position: relative;
+  top: 88vh;
 }
 
 .blueHover:hover {

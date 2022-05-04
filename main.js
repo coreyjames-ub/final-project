@@ -8,8 +8,10 @@ const invadedFinale = new Audio('sounds/invadedFinale.mp3');
 const levelOneComplete = new Audio('sounds/levelOneComplete.mp3');
 const returnOfTheJedi = new Audio('sounds/returnOfTheJedi.mp3');
 const ewokCelebration = new Audio('sounds/ewokCelebration.mp3');
+let music;
 
 // DOM ELEMENTS
+// Intro Area
 let enterSectionText = document.querySelector('#enter');
 let titleArea = document.querySelector('#titleArea');
 let introArea = document.querySelector('#introArea');
@@ -21,7 +23,12 @@ let continueButton = document.querySelector('#continueButton');
 let crawlArea = document.querySelector('#crawlArea');
 let playText = document.querySelector('#playText');
 let tagLineTwo = document.querySelector('#tagLineTwo');
+// Game Area
 let gameArea = document.querySelector('#gameArea');
+let playGameText = document.querySelector('#playGameText');
+let instructionText = document.querySelector('#instructionText');
+
+
 let galacticDefender = document.querySelector('#galacticDefender');
 let gamePlayEndArea = document.querySelector('#gamePlayEndArea');
 let gamePlayEndText = document.querySelector('#gamePlayEndText');
@@ -29,33 +36,30 @@ let gamePlayScoreText = document.querySelector('#gamePlayScoreText');
 let scoreBoardText = document.querySelector('#scoreBoardText');
 let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
-let restartArea = document.querySelector('#restartArea');
-let instructionArea = document.querySelector('#instructionArea');
-let inst = document.querySelector('.inst');
 
 // GAME VARIABLES
+// Local Storage Variables
 let score;
 let gamePlayEnded;
 let invaded;
-let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
-let completedLevelOneText = "* Rogue Three,\n* This is Echo Base.\n* TIE Fighters are on retreat.\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n* Return to Base."
-let completedLevelTwoText = "* Rogue Three,\n* This is Echo Base.\n* The DEATH STAR\n is destroyed!\n* All Imperial Forces are retreating.\n* We have defeated the Empire\nand defended our galaxy.\n* Return to base,\nit's time to celebrate!"
 let scoreBoard;
 let completedLevel;
 let level;
+// End of Game Play Messages
+let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
+let completedLevelOneText = "* Rogue Three,\n* This is Echo Base.\n* TIE Fighters are on retreat.\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n* Return to Base."
+let completedLevelTwoText = "* Rogue Three,\n* This is Echo Base.\n* The DEATH STAR\n is destroyed!\n* All Imperial Forces are retreating.\n* We have defeated the Empire\nand defended our galaxy.\n* Return to base,\nit's time to celebrate!"
+// Game Motion and TIE Fighter Creation Variables
 let laserSpeedInterval = 35;
 let tieFighterInvasionSpeedInterval = 400;
 let tieFighterInvasionCreationInterval = 4000;
 let xWingVelocity = 1.5;
 let tieMult = 2;
-
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
-
 // TIE Fighter Object Structure
 let tieFighterObject = {};
-
 // Laser Object Structure
 let laserObject = {};
 
@@ -151,158 +155,141 @@ let getCompletedLevel = () => {
 
 // EVENT LISTENERS
 
-// DEV MODE
-// enterSection.addEventListener('click', function () {
-//     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-// // this is for mobile.
-// isMobile = true;
-// window.scrollTo(0, 1);
-// gameArea.style.height = '100vh';
-// gameArea.style.width = '100vw';
-//     }
+// A bunch of cascading time outs  -- call backs or promises would be more elegant, but I have not really mastered that yet.
+// enterSectionText.addEventListener('click', function () {
 //     myFadeOut(titleArea);
 //     setTimeout(function () {
 //         myFadeIn(introArea);
-//         trailerArea.style.display = 'flex'
-//         playText.style.display = 'flex'
 //     }, 1000)
+//     setTimeout(function () {
+//         myFadeIn(productionArea);
+//     }, 1500);
+//     // foxIntro.play();
+//     handleMusic(foxIntro);
+//     setTimeout(function () {
+//         myFadeOut(productionArea)
+//     }, 20500);
+//     setTimeout(function () {
+//         myFadeIn(longTimeArea);
+//     }, 22000)
+//     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+//         setTimeout(function () {
+//             myFadeIn(continueButton);
+//         }, 29000)
+//         continueButton.addEventListener('click', function () {
+//             starWarsTheme.play();
+//             myFadeOut(longTimeArea);
+//             setTimeout(function () {
+//                 playIntroCrawl();
+//             }, 1000);
+//             setTimeout(function () {
+//                 myFadeOut(crawlArea);
+//             }, 84000);
+//             setTimeout(function () {
+//                 myFadeIn(playText);
+//             }, 85000);
+//             setTimeout(function () {
+//                 myFadeIn(tagLineTwo);
+//             }, 87000)
+//         });
+//     } else {
+//         setTimeout(function () {
+//             myFadeOut(longTimeArea);
+//         }, 29000)
+//         setTimeout(function () {
+//             // starWarsTheme.play();
+//             handleMusic(starWarsTheme, foxIntro);
+//             playIntroCrawl();
+//         }, 30000);
+//         setTimeout(function () {
+//             myFadeOut(crawlArea);
+//         }, 114000);
+//         setTimeout(function () {
+//             myFadeIn(playText);
+//         }, 115000);
+//         playText.style.position = 'absolute';
+//         setTimeout(function () {
+//             myFadeIn(tagLineTwo);
+//         }, 117000)
+//     }
 // });
 
+// playText.addEventListener('click', function () {
+//     myFadeOut(introArea);
+//     setTimeout(function () {
+//         myFadeIn(gameArea);
+//         myFadeIn(playGameText);
+//         myFadeIn(instructionText);
+//     }, 1000);
+// });
+
+// DEV MODE
 enterSectionText.addEventListener('click', function () {
     myFadeOut(titleArea);
     setTimeout(function () {
-        myFadeIn(introArea);
-    }, 1000)
-    setTimeout(function () {
-        myFadeIn(productionArea);
-    }, 1500);
-    foxIntro.play();
-    setTimeout(function () {
-        myFadeOut(productionArea)
-    }, 20500);
-    setTimeout(function () {
-        myFadeIn(longTimeArea);
-    }, 22000)
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        setTimeout(function () {
-            myFadeIn(continueButton);
-        }, 29000)
-        continueButton.addEventListener('click', function () {
-            starWarsTheme.play();
-            myFadeOut(longTimeArea);
-            setTimeout(function () {
-                playIntroCrawl();
-            }, 1000);
-            setTimeout(function () {
-                myFadeOut(crawlArea);
-            }, 84000);
-            setTimeout(function () {
-                myFadeIn(playText);
-            }, 85000);
-            setTimeout(function () {
-                myFadeIn(tagLineTwo);
-            }, 87000)
-        });
-    } else {
-        setTimeout(function () {
-            myFadeOut(longTimeArea);
-        }, 29000)
-        setTimeout(function () {
-            starWarsTheme.play();
-            playIntroCrawl();
-        }, 30000);
-        setTimeout(function () {
-            myFadeOut(crawlArea);
-        }, 114000);
-        setTimeout(function () {
-            myFadeIn(playText);
-        }, 115000);
-        playText.style.position = 'absolute';
-        setTimeout(function () {
-            myFadeIn(tagLineTwo);
-        }, 117000)
-    }
+        myFadeIn(gameArea);
+        myFadeIn(playGameText);
+        myFadeIn(instructionText);
+    }, 1000);
 });
 
-let showInstruction = () => {
-    instructionArea.style.display = 'flex';
-    trailerArea.style.flexDirection = 'column'
-    trailerArea.style.alignItems = 'center'
-    trailerArea.style.justifyContent = 'center'
-    myFadeIn(inst)
-    setTimeout(function () {
-        myFadeOut(inst)
-    }, 3000);
-}
-
-playText.addEventListener('click', function () {
-    showInstruction();
-    instructionArea.style.display = 'none';
-    starWarsTheme.pause();
-    starWarsTheme.currentTime = 0;
-
-    myFadeOut(introArea);
-    setTimeout(function () {
-        myFadeIn(gameArea);
-        startGame();
-        if (level === '1') {
-            playLevelOne();
-        }
-        if (level === '2') {
-            playLevelTwo();
-        }
-        window.addEventListener("keydown", userArrow);
-        window.addEventListener('keydown', fireLasers);
-        let myTieFighterInvasionInterval = setInterval(function () {
-            tieFighterInvasion(myTieFighterInvasionInterval)
-        }, tieFighterInvasionCreationInterval);
-    }, 1000);
+playGameText.addEventListener('click', function () {
+    intialGalacticDefenderXPostion();
+    myFadeOut(playGameText);
+    myFadeOut(instructionText);
+    determineGamePlayMusic(music);
+    window.addEventListener("keydown", userArrow);
+    window.addEventListener('keydown', fireLasers);
+    let myTieFighterInvasionInterval = setInterval(function () {
+        tieFighterInvasion(myTieFighterInvasionInterval)
+    }, tieFighterInvasionCreationInterval);
 });
 
 reboot.addEventListener('click', function () {
     refreshReboot();
 })
 
-playAgain.addEventListener('click', function () {
-    if (completedLevel == '1') {
-        levelOneComplete.pause();
-        levelOneComplete.currentTime = 0;
-    } else if (completedLevel == '2') {
-        localStorage.setItem('level', '0');
-        localStorage.setItem('completedLevel', '0');
-        ewokCelebration.pause();
-        ewokCelebration.currentTime = 0;
-    } else {
-        invadedFinale.pause();
-        invadedFinale.currentTime = 0;
-    }
-    gamePlayEnded = false;
-    localStorage.setItem('gamePlayEnded', gamePlayEnded);
-    score = 0;
-    localStorage.setItem('score', score);
-    myFadeOut(restartArea);
-    setTimeout(function () {
-        if (completedLevel == '1') {
-            returnOfTheJedi.play();
-        } else {
-            imperialMarch.play()
-        }
-        playAgain.style.display = 'none';
-        reboot.style.display = 'none'
-        startGame();
-        if (level === '1') {
-            playLevelOne();
-        }
-        if (level === '2') {
-            playLevelTwo();
-        }
-        let myTieFighterInvasionInterval = setInterval(function () {
-            tieFighterInvasion(myTieFighterInvasionInterval)
-        }, tieFighterInvasionCreationInterval);
-    }, 1000)
-})
-
 // HELPER FUNCTIONS
+
+let handleMusic = (playMusic, pauseMusic) => {
+    if (pauseMusic != null) {
+        pauseMusic.pause();
+        pauseMusic.currentTime = 0;
+    }
+    setTimeout(function () {
+        playMusic.play();
+    }, 100);
+    music = playMusic;
+};
+
+let handleSoundEffects = (playSoundEffect, pauseSoundEffect) => {
+    if (pauseSoundEffect != null) {
+        pauseSoundEffect.pause();
+        pauseSoundEffect.currentTime = 0;
+    }
+    setTimeout(function () {
+        playSoundEffect.play();
+    }, 10);
+};
+
+let determineGamePlayMusic = (pauseMusic) => {
+    let playMusic;
+    if (level === 'levelOne') {
+        playMusic = imperialMarch;
+    } else if (level === 'levelTwo') {
+        playMusic = returnOfTheJedi;
+    }
+    if (pauseMusic != null) {
+        pauseMusic.pause();
+        pauseMusic.currentTime = 0;
+    }
+    // we need to set up getters and setters
+    playMusic = imperialMarch;
+    setTimeout(function () {
+        playMusic.play();
+    }, 100)
+    music = playMusic;
+};
 
 let createTieFighterDom = (tieFighterId) => {
     let tieFighterDom = document.createElement('img');
@@ -320,7 +307,7 @@ let createTieFighterDom = (tieFighterId) => {
 }
 
 let initialTieFighterXPosition = (tieFighterDom, tieFighterId) => {
-    let tieFighterXPosition = Math.floor(Math.random() * 90);
+    let tieFighterXPosition = Math.ceil(Math.random() * 93);
     tieFighterDom.style.left = tieFighterXPosition + 'vw';
     tieFighterObject[tieFighterId].tieFighterXPosition = tieFighterXPosition;
 }
@@ -555,7 +542,7 @@ let displayGamePlayEndedArea = () => {
             scoreBoardText.style.display = 'none';
             scoreBoardText.innerText = '';
             gamePlayEndArea.style.display = 'none';
-            restartArea.style.display = 'flex';
+            playGameText.style.display = 'flex';
             console.log('invaded ..')
             console.log(invaded);
             console.log('completed leve')
@@ -576,7 +563,7 @@ let displayGamePlayEndedArea = () => {
                 // level = '2';
                 localStorage.setItem('level', level);
             }
-            myFadeIn(restartArea);
+            myFadeIn(playGameText);
             myFadeIn(playAgain);
         }, 36000);
         setTimeout(function () {
@@ -674,9 +661,9 @@ let fireLasers = (event) => {
 }
 
 let userArrow = (event) => {
-    if (gamePlayEnded == true) {
-        return;
-    }
+    // if (gamePlayEnded == true) {
+    //     return;
+    // }
     if (event.key === 'ArrowLeft') {
         if (galacticDefenderXPosition >= 1) {
             galacticDefenderXVelocity = -(xWingVelocity);
@@ -684,7 +671,7 @@ let userArrow = (event) => {
             galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
         }
     } else if (event.key === 'ArrowRight') {
-        if (galacticDefenderXPosition <= 89) {
+        if (galacticDefenderXPosition <= 93) {
             galacticDefenderXVelocity = xWingVelocity;
             galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
             galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
@@ -894,4 +881,10 @@ let typeText = (dom, str) => {
         dom.innerText = strB;
         i = i + 1;
     }, 50)
+}
+
+let intialGalacticDefenderXPostion = () => {
+    // The x position of Galactic Defender
+    galacticDefenderXPosition = 47;
+    galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
 }
