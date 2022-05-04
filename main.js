@@ -194,6 +194,7 @@ playGameText.addEventListener('click', function () {
     intialGalacticDefenderXPostion();
     myFadeOut(playGameText);
     myFadeOut(instructionText);
+    myFadeOut(reboot);
     determineGamePlayMusic(music);
     window.addEventListener("keydown", userArrow);
     window.addEventListener('keydown', fireLasers);
@@ -568,12 +569,12 @@ let tieFighterInvaded = () => {
 let printScoreBoardText = () => {
     for (let i = 1; i < 6; i++) {
         topScoresText = topScoresText + "\n" + (i) + ". " + scoreBoard[i] + " pts";
-        if (score > scoreBoard[i]) {
+        if (scoreBoard[i] === score) {
             specialText = '\nCongratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
         };
     };
-    if (score > scoreBoard[1]) {
-        specialText = '\nCongratulations!\nYour Score of ' + score + ' pts\nis the new High Score!';
+    if (scoreBoard[1] === score) {
+        specialText = '\nCongratulations!\nYou set a new High Score!';
     };
     topScoresText = topScoresText + '\n' + specialText;
     // if (completedLevel === '1') {
@@ -658,7 +659,7 @@ let displayGamePlayEndedArea = (gamePlayEndMusic, endText) => {
     }, 36000);
     setTimeout(function () {
         myFadeIn(reboot);
-    }, 39000);
+    }, 38000);
 }
 
 let startGame = () => {
