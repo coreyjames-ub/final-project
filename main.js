@@ -38,13 +38,10 @@ let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
 
 // GAME VARIABLES
-// Local Storage Variables
-let score;
-let gamePlayEnded;
-let invaded;
-let scoreBoard;
-let completedLevel;
-let level;
+let gamePlayEnded = false;
+let score = 0;
+let invaded = false;
+let completedLevel = false;
 // End of Game Play Messages
 let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
 let completedLevelOneText = "* Rogue Three,\n* This is Echo Base.\n* TIE Fighters are on retreat.\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n* Return to Base."
@@ -54,7 +51,7 @@ let laserSpeedInterval = 35;
 let tieFighterInvasionSpeedInterval = 400;
 let tieFighterInvasionCreationInterval = 4000;
 let xWingVelocity = 1.5;
-let tieMult = 2;
+let tieFighterMultiplier = 2;
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
@@ -62,95 +59,46 @@ let galacticDefenderXVelocity;
 let tieFighterObject = {};
 // Laser Object Structure
 let laserObject = {};
+// Local Storage Variables
+let level;
+let scoreBoard;
 
-// SET UP SCORE IN LOCAL STORAGE
-let getScore = () => {
-    score = Number(localStorage.getItem('score'));
-    if (score === null) {
-        score = 0;
-        localStorage.setItem('score', score);
+// LOCAL STORAGE FUNCTIONS
+let getLevel = () => {
+    level = localStorage.getItem('level');
+    if (level === null) {
+        level = 'levelOne';
     }
-    console.log("score");
-    console.log(score);
-};
-
-let getGamePlayEnded = () => {
-    gamePlayEnded = localStorage.getItem('gamePlayEnded');
-    if (gamePlayEnded === null) {
-        gamePlayEnded = false;
-        localStorage.setItem('gamePlayEnded', gamePlayEnded);
-    } else if (gamePlayEnded == 'true') {
-        gamePlayEnded = true;
-    } else if (gamePlayEnded == 'false') {
-        gamePlayEnded = false;
-    }
-    console.log('gamePlayEnded');
-    console.log(gamePlayEnded);
+    console.log('Get Level from Local Storage: ' + level);
 }
 
-let getInvaded = () => {
-    invaded = localStorage.getItem('invaded');
-    if (invaded === null) {
-        invaded = false;
-        localStorage.setItem('invaded', invaded);
-    } else if (invaded = 'true') {
-        invaded = true;
-    } else if (invaded = 'false') {
-        invaded = false;
-    }
-    console.log('invaded');
-    console.log(invaded);
+getLevel();
+
+let setLevel = (level) => {
+    localStorage.setItem('level', level);
 }
 
 let getScoreBoard = () => {
     scoreBoard = localStorage.getItem('scoreBoard');
     if (scoreBoard === null) {
-        scoreBoard = [];
-        localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
+        scoreBoard = {
+            first: '- - -',
+            second: '- - -',
+            third: '- - -',
+            forth: '- - -',
+            fifth: '- - -'
+        };
     } else {
         scoreBoard = JSON.parse(scoreBoard);
     }
-    console.log('scoreBoard');
+    console.log('Get Score Board from Local Storage:');
     console.log(scoreBoard);
 }
 
-let getLevel = () => {
-    level = localStorage.getItem('level');
-    if (level === null) {
-        level = '1';
-        localStorage.setItem('level', level);
-    }
-    if (level === '1') {
-        console.log('inside level 1')
-        laserSpeedInterval = 30;
-        tieFighterInvasionSpeedInterval = 300;
-        tieFighterInvasionCreationInterval = 3000;
-        xWingVelocity = 2;
-        tieMult = 2;
-    }
+getScoreBoard();
 
-    if (level === '2') {
-        laserSpeedInterval = 10;
-        tieFighterInvasionSpeedInterval = 260;
-        tieFighterInvasionCreationInterval = 2600;
-        xWingVelocity = 3.5;
-        tieMult = 4;
-    }
-    console.log('level');
-    console.log(level);
-}
-
-let getCompletedLevel = () => {
-    completedLevel = localStorage.getItem('completedLevel');
-    if (completedLevel === null) {
-        completedLevel = '0';
-        localStorage.setItem('completedLevel', completedLevel);
-        let x = localStorage.getItem('completedLevel');
-        console.log('x');
-        console.log(x);
-    }
-    console.log('completedLevel');
-    console.log(completedLevel);
+let setScoreBoard = (scoreBoard) => {
+    localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
 }
 
 // EVENT LISTENERS
@@ -262,11 +210,10 @@ let handleMusic = (playMusic, pauseMusic) => {
     music = playMusic;
 };
 
-let handleSoundEffects = (playSoundEffect, pauseSoundEffect) => {
-    if (pauseSoundEffect != null) {
-        pauseSoundEffect.pause();
-        pauseSoundEffect.currentTime = 0;
-    }
+let handleSoundEffects = (playSoundEffect) => {
+    playSoundEffect.pause();
+    playSoundEffect.currentTime = 0;
+
     setTimeout(function () {
         playSoundEffect.play();
     }, 10);
@@ -300,7 +247,6 @@ let createTieFighterDom = (tieFighterId) => {
     tieFighterObject[tieFighterId] = {
         tieFighterXPosition: 0,
         tieFighterYPosition: 0,
-        tieFighterVelocity: 0,
     }
     gameArea.appendChild(tieFighterDom);
     return tieFighterDom;
@@ -319,13 +265,13 @@ let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
 }
 
 let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval) => {
-    if (gamePlayEnded == true) {
+    if (gamePlayEnded === true) {
         tieFighterDom.remove();
         delete tieFighterObject[tieFighterId];
         clearInterval(myTieFighterMoveInterval);
         return;
     }
-    if (tieFighterDom.style.display == 'none') {
+    if (tieFighterDom.style.display === 'none') {
         tieFighterDom.remove();
         delete tieFighterObject[tieFighterId];
         clearInterval(myTieFighterMoveInterval);
@@ -333,14 +279,15 @@ let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterMoveInterval, myT
     }
     let tieFighterYPosition = tieFighterObject[tieFighterId].tieFighterYPosition + 1;
     tieFighterDom.style.top = tieFighterYPosition + 'vh';
-    if (tieFighterYPosition >= 80) {
+    if (tieFighterYPosition >= 90) {
         tieFighterDom.remove();
         delete tieFighterObject[tieFighterId];
         clearInterval(myTieFighterMoveInterval);
         clearInterval(myTieFighterInvasionInterval);
         tieFighterInvaded();
-        imperialMarch.pause();
-        imperialMarch.currentTime = 0;
+        // HANDLE MUSIC
+        // imperialMarch.pause();
+        // imperialMarch.currentTime = 0;
         return;
     }
     tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
@@ -352,7 +299,7 @@ let tieFighterInvasion = (myTieFighterInvasionInterval) => {
         return;
     }
 
-    for (let i = 0; i < tieMult; i++) {
+    for (let i = 0; i < tieFighterMultiplier; i++) {
         let tieFighterId = generateId();
         let tieFighterDom = createTieFighterDom(tieFighterId);
         initialTieFighterXPosition(tieFighterDom, tieFighterId);
@@ -406,35 +353,34 @@ let growLaserHeight = (laserDom) => {
             height = height + 1;
             laserDom.style.height = height + 'vh';
         }, 35)
-
     }
 }
 
 let moveLaser = (laserDom, laserId, myLaserInterval) => {
+
     if (gamePlayEnded == true) {
         laserDom.remove();
         delete laserObject[laserId];
         clearInterval(myLaserInterval);
         return;
     }
+
     let laserYPostion = laserObject[laserId].laserYPosition - 1;
     laserDom.style.top = laserYPostion + 'vh';
+
     if (laserYPostion <= 0) {
         laserDom.remove();
         delete laserObject[laserId];
         clearInterval(myLaserInterval);
         return;
     }
+
     for (let tieFighterId in tieFighterObject) {
         if (laserObject[laserId].laserXPosition >= tieFighterObject[tieFighterId].tieFighterXPosition &&
             laserObject[laserId].laserXPosition <= tieFighterObject[tieFighterId].tieFighterXPosition + 5 &&
             laserYPostion >= tieFighterObject[tieFighterId].tieFighterYPosition &&
             laserYPostion <= tieFighterObject[tieFighterId].tieFighterYPosition + 5) {
-            tieFighterExplosion.pause();
-            tieFighterExplosion.currentTime = 0;
-            setTimeout(function () {
-                tieFighterExplosion.play();
-            }, 10)
+            handleSoundEffects(tieFighterExplosion);
             let tieDom = document.getElementById(tieFighterId);
             tieDom.style.display = 'none';
             let explosionDom = explodeTieFighter(tieFighterObject[tieFighterId].tieFighterXPosition, tieFighterObject[tieFighterId].tieFighterYPosition);
@@ -634,8 +580,7 @@ let fireLasers = (event) => {
         return;
     }
     if (event.code === 'Space') {
-        xWingFire.pause();
-        xWingFire.currentTime = 0;
+        
         //LEFT LASER
         let leftLaserId = generateId()
         let leftLaserDom = createLaserDom(leftLaserId);
@@ -656,7 +601,7 @@ let fireLasers = (event) => {
             moveLaser(rightLaserDom, rightLaserId, myRightLaserInterval);
         }, laserSpeedInterval);
 
-        xWingFire.play();
+        handleSoundEffects(xWingFire);
     }
 }
 
@@ -716,7 +661,7 @@ let playLevelOne = () => {
             tieFighterInvasionSpeedInterval = 280;
             tieFighterInvasionCreationInterval = 2800;
             xWingVelocity = 3;
-            tieMult = 3;
+            tieFighterMultiplier = 3;
         }, 63000);
         let myLevelOneTimeOutTwo = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
@@ -729,7 +674,7 @@ let playLevelOne = () => {
             tieFighterInvasionSpeedInterval = 270;
             tieFighterInvasionCreationInterval = 2700;
             xWingVelocity = 3.5;
-            tieMult = 3;
+            tieFighterMultiplier = 3;
         }, 125000);
         let myLevelOneTimeOutThree = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
@@ -766,7 +711,7 @@ let playLevelTwo = () => {
             tieFighterInvasionSpeedInterval = 260;
             tieFighterInvasionCreationInterval = 2600;
             xWingVelocity = 3.5;
-            tieMult = 4;
+            tieFighterMultiplier = 4;
         }, 90000);
         let myLevelTwoTimeOutTwo = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
@@ -779,7 +724,7 @@ let playLevelTwo = () => {
             tieFighterInvasionSpeedInterval = 250;
             tieFighterInvasionCreationInterval = 2500;
             xWingVelocity = 4;
-            tieMult = 4;
+            tieFighterMultiplier = 4;
         }, 180000);
         let myLevelTwoTimeOutThree = setTimeout(function () {
             if (invaded === true || gamePlayEnded === true) {
