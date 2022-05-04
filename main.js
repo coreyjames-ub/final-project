@@ -10,7 +10,7 @@ const returnOfTheJedi = new Audio('sounds/returnOfTheJedi.mp3');
 const ewokCelebration = new Audio('sounds/ewokCelebration.mp3');
 
 // DOM ELEMENTS
-let enterSection = document.querySelector('#enter');
+let enterSectionText = document.querySelector('#enter');
 let titleArea = document.querySelector('#titleArea');
 let introArea = document.querySelector('#introArea');
 let productionArea = document.querySelector('#productionArea');
@@ -30,6 +30,8 @@ let scoreBoardText = document.querySelector('#scoreBoardText');
 let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
 let restartArea = document.querySelector('#restartArea');
+let instructionArea = document.querySelector('#instructionArea');
+let inst = document.querySelector('.inst');
 
 // GAME VARIABLES
 let score;
@@ -166,7 +168,7 @@ let getCompletedLevel = () => {
 //     }, 1000)
 // });
 
-enterSection.addEventListener('click', function () {
+enterSectionText.addEventListener('click', function () {
     myFadeOut(titleArea);
     setTimeout(function () {
         myFadeIn(introArea);
@@ -222,17 +224,31 @@ enterSection.addEventListener('click', function () {
     }
 });
 
+let showInstruction = () => {
+    instructionArea.style.display = 'flex';
+    trailerArea.style.flexDirection = 'column'
+    trailerArea.style.alignItems = 'center'
+    trailerArea.style.justifyContent = 'center'
+    myFadeIn(inst)
+    setTimeout(function () {
+        myFadeOut(inst)
+    }, 3000);
+}
+
 playText.addEventListener('click', function () {
+    showInstruction();
+    instructionArea.style.display = 'none';
     starWarsTheme.pause();
     starWarsTheme.currentTime = 0;
+
     myFadeOut(introArea);
     setTimeout(function () {
         myFadeIn(gameArea);
         startGame();
-        if (level === '1'){
+        if (level === '1') {
             playLevelOne();
         }
-        if (level === '2'){
+        if (level === '2') {
             playLevelTwo();
         }
         window.addEventListener("keydown", userArrow);
@@ -274,10 +290,10 @@ playAgain.addEventListener('click', function () {
         playAgain.style.display = 'none';
         reboot.style.display = 'none'
         startGame();
-        if (level === '1'){
+        if (level === '1') {
             playLevelOne();
         }
-        if (level === '2'){
+        if (level === '2') {
             playLevelTwo();
         }
         let myTieFighterInvasionInterval = setInterval(function () {
