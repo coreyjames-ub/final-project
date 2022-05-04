@@ -46,9 +46,13 @@ let completedLevel = false;
 let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
 let completedLevelOneText = "* Rogue Three,\n* This is Echo Base.\n* TIE Fighters are on retreat.\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n* Return to Base."
 let completedLevelTwoText = "* Rogue Three,\n* This is Echo Base.\n* The DEATH STAR\n is destroyed!\n* All Imperial Forces are retreating.\n* We have defeated the Empire\nand defended our galaxy.\n* Return to base,\nit's time to celebrate!"
+// Score Board Messages
+let specialText = "\nYou did alright Kid."
+let topScoresText = "Top Scores:"
 // Game Motion and TIE Fighter Creation Variables
 let laserSpeedInterval = 35;
-let tieFighterInvasionSpeedInterval = 400;
+// let tieFighterInvasionSpeedInterval = 400;
+let tieFighterInvasionSpeedInterval = 1;
 let tieFighterInvasionCreationInterval = 4000;
 let xWingVelocity = 1.5;
 let tieFighterMultiplier = 2;
@@ -82,11 +86,16 @@ let getScoreBoard = () => {
     scoreBoard = localStorage.getItem('scoreBoard');
     if (scoreBoard === null) {
         scoreBoard = {
-            first: '- - -',
-            second: '- - -',
-            third: '- - -',
-            forth: '- - -',
-            fifth: '- - -'
+            1: '- - -',
+            2: '- - -',
+            3: '- - -',
+            4: '- - -',
+            5: '- - -'
+            // first: '- - -',
+            // second: '- - -',
+            // third: '- - -',
+            // forth: '- - -',
+            // fifth: '- - -'
         };
     } else {
         scoreBoard = JSON.parse(scoreBoard);
@@ -210,6 +219,86 @@ let handleMusic = (playMusic, pauseMusic) => {
     music = playMusic;
 };
 
+let playIntroCrawl = () => {
+    trailerArea.style.display = 'flex'
+    trailerArea.style.flexDirection = 'column'
+    trailerArea.style.alignItems = 'center'
+    trailerArea.style.justifyContent = 'center'
+    myShrinkText(hollowStarWarsText);
+}
+
+let myFadeIn = (dom) => {
+    let opacity = 0;
+    dom.style.display = 'flex';
+    dom.style.flexDirection = 'column'
+    dom.style.alignItems = 'center'
+    dom.style.justifyContent = 'center'
+    dom.style.opacity = '0';
+    let myTimer = setInterval(function () {
+        if (opacity >= 1) {
+            dom.style.opacity = 1;
+            clearInterval(myTimer);
+        }
+        dom.style.opacity = opacity;
+        opacity += opacity + 0.1;
+    }, 50)
+};
+
+let myFadeOut = (dom) => {
+    let opacity = 1;
+    dom.style.opacity = 1;
+    let myTimer = setInterval(function () {
+        if (opacity <= 0) {
+            clearInterval(myTimer);
+            dom.style.display = 'none';
+            dom.style.opacity = 1;
+        }
+        dom.style.opacity = opacity;
+        opacity = opacity - 0.1;
+    }, 50)
+};
+
+let myShrinkText = (dom) => {
+    dom.style.display = 'flex';
+    dom.style.flexDirection = 'column';
+    dom.style.alignItems = 'center';
+    dom.style.alignContent = 'center';
+
+    let fontSize = 16;
+    let opacity = 1;
+    let myTimer = setInterval(function () {
+        if (fontSize <= 0) {
+            clearInterval(myTimer);
+            dom.style.display = 'none';
+        }
+        dom.style.fontSize = fontSize + "vw";
+        dom.style.opacity = opacity;
+        opacity = opacity - 0.002;
+        fontSize = fontSize - 0.07;
+    }, 50)
+}
+
+let typeText = (dom, str) => {
+    dom.style.display = 'flex'
+    let strB = ''
+    let i = 0;
+    let myTypeInterval = setInterval(function () {
+        if (i == (str.length)) {
+            clearInterval(myTypeInterval)
+            return;
+        }
+        strB = strB + str[i]
+        dom.innerText = strB;
+        i = i + 1;
+    }, 50)
+}
+
+let intialGalacticDefenderXPostion = () => {
+    // The x position of Galactic Defender
+    galacticDefenderXPosition = 47;
+    galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+}
+
 let handleSoundEffects = (playSoundEffect) => {
     playSoundEffect.pause();
     playSoundEffect.currentTime = 0;
@@ -238,76 +327,23 @@ let determineGamePlayMusic = (pauseMusic) => {
     music = playMusic;
 };
 
-let createTieFighterDom = (tieFighterId) => {
-    let tieFighterDom = document.createElement('img');
-    tieFighterDom.src = 'assets/tieFighter.png';
-    tieFighterDom.style.display = 'flex';
-    tieFighterDom.style.position = 'absolute';
-    tieFighterDom.id = tieFighterId;
-    tieFighterObject[tieFighterId] = {
-        tieFighterXPosition: 0,
-        tieFighterYPosition: 0,
-    }
-    gameArea.appendChild(tieFighterDom);
-    return tieFighterDom;
-}
-
-let initialTieFighterXPosition = (tieFighterDom, tieFighterId) => {
-    let tieFighterXPosition = Math.ceil(Math.random() * 93);
-    tieFighterDom.style.left = tieFighterXPosition + 'vw';
-    tieFighterObject[tieFighterId].tieFighterXPosition = tieFighterXPosition;
-}
-
-let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
-    let tieFighterYPosition = 0;
-    tieFighterDom.style.top = tieFighterYPosition + 'vh';
-    tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
-}
-
-let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval) => {
-    if (gamePlayEnded === true) {
-        tieFighterDom.remove();
-        delete tieFighterObject[tieFighterId];
-        clearInterval(myTieFighterMoveInterval);
-        return;
-    }
-    if (tieFighterDom.style.display === 'none') {
-        tieFighterDom.remove();
-        delete tieFighterObject[tieFighterId];
-        clearInterval(myTieFighterMoveInterval);
-        return;
-    }
-    let tieFighterYPosition = tieFighterObject[tieFighterId].tieFighterYPosition + 1;
-    tieFighterDom.style.top = tieFighterYPosition + 'vh';
-    if (tieFighterYPosition >= 90) {
-        tieFighterDom.remove();
-        delete tieFighterObject[tieFighterId];
-        clearInterval(myTieFighterMoveInterval);
-        clearInterval(myTieFighterInvasionInterval);
-        tieFighterInvaded();
-        // HANDLE MUSIC
-        // imperialMarch.pause();
-        // imperialMarch.currentTime = 0;
-        return;
-    }
-    tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
-}
-
-let tieFighterInvasion = (myTieFighterInvasionInterval) => {
-
+let userArrow = (event) => {
     if (gamePlayEnded == true) {
         return;
     }
+    if (event.key === 'ArrowLeft') {
+        if (galacticDefenderXPosition >= 1) {
+            galacticDefenderXVelocity = -(xWingVelocity);
+            galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
+            galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+        }
+    } else if (event.key === 'ArrowRight') {
+        if (galacticDefenderXPosition <= 93) {
+            galacticDefenderXVelocity = xWingVelocity;
+            galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
+            galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
 
-    for (let i = 0; i < tieFighterMultiplier; i++) {
-        let tieFighterId = generateId();
-        let tieFighterDom = createTieFighterDom(tieFighterId);
-        initialTieFighterXPosition(tieFighterDom, tieFighterId);
-        initialTieFighterYPosition(tieFighterDom, tieFighterId);
-
-        let myTieFighterMoveInterval = setInterval(function () {
-            moveTieFighter(tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval);
-        }, tieFighterInvasionSpeedInterval);
+        }
     }
 }
 
@@ -356,6 +392,12 @@ let growLaserHeight = (laserDom) => {
     }
 }
 
+let addPointsOnHit = () => {
+    score = score + 25;
+    localStorage.setItem('score', score);
+    console.log(score)
+};
+
 let moveLaser = (laserDom, laserId, myLaserInterval) => {
 
     if (gamePlayEnded == true) {
@@ -398,189 +440,12 @@ let moveLaser = (laserDom, laserId, myLaserInterval) => {
     laserObject[laserId].laserYPosition = laserYPostion;
 }
 
-let explodeTieFighter = (left, top) => {
-    let explosionDom = document.createElement('img');
-    explosionDom.src = 'assets/explosion.png'
-    explosionDom.style.display = 'flex';
-    explosionDom.style.position = 'absolute';
-    gameArea.appendChild(explosionDom);
-    explosionDom.style.left = left + 'vw';
-    explosionDom.style.top = top + 'vh';
-    return explosionDom;
-}
-
-let displayGamePlayEndedArea = () => {
-    if (gamePlayEnded == true) {
-        console.log(level);
-        if (level === '1') {
-            imperialMarch.pause();
-            imperialMarch.currentTime = 0;
-        } else if (level === '2') {
-            returnOfTheJedi.pause();
-            returnOfTheJedi.currentTime = 0;
-        }
-
-        myFadeIn(gamePlayEndArea);
-        gamePlayEndArea.style.alignItems = 'flex-start';
-        gamePlayEndArea.style.justifyContent = 'flex-start';
-        if (invaded === true) {
-            typeText(gamePlayEndText, invadedText);
-            invadedFinale.play();
-        } else if (completedLevel === '1') {
-            typeText(gamePlayEndText, completedLevelOneText);
-            levelOneComplete.play();
-        } else if (completedLevel === '2') {
-            typeText(gamePlayEndText, completedLevelTwoText);
-            ewokCelebration.play();
-        }
-        setTimeout(function () {
-            myFadeOut(gamePlayEndArea);
-        }, 10000);
-        setTimeout(function () {
-            gamePlayEndText.style.display = 'none';
-            gamePlayEndText.innerText = '';
-            gamePlayEndArea.style.display = 'none';
-            let scoreText = `Score: ${score} pts`;
-            gamePlayEndArea.style.top = '30vh';
-            gamePlayEndArea.style.left = '30vw';
-            gamePlayEndArea.style.display = 'flex';
-            gamePlayEndArea.style.opacity = 1;
-            typeText(gamePlayScoreText, scoreText)
-        }, 12000);
-        setTimeout(function () {
-            myFadeOut(gamePlayEndArea)
-        }, 16000);
-        setTimeout(function () {
-            gamePlayScoreText.style.display = 'none';
-            gamePlayScoreText.innerText = '';
-            gamePlayEndArea.style.display = 'none';
-            gamePlayEndArea.style.top = '12vh';
-            gamePlayEndArea.style.left = '25vw';
-            gamePlayEndArea.style.display = 'flex';
-            gamePlayEndArea.style.opacity = 1;
-            updateScoreBoard();
-            let specialText = '';
-            let topScoreText = "Top Scores:"
-            specialText = "You did alright Kid.\nWhat do you say?\nLet's give it another shot!"
-            for (let i = 0; i < scoreBoard.length; i++) {
-                topScoreText = topScoreText + "\n" + (i + 1) + ". " + scoreBoard[i] + " pts";
-                if (score === scoreBoard[i]) {
-                    specialText = 'Congratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
-                };
-            };
-            if (scoreBoard[0] === score) {
-                specialText = 'Congratulations!\nYour Score of ' + score + ' pts\nis the new High Score!';
-            };
-            topScoreText = topScoreText + '\n' + specialText;
-            if (completedLevel === '1') {
-                topScoreText = topScoreText + '\nLooks like more\nTIE Fighters are\nin enroute and\nthey need us out there!'
-            } else if (completedLevel === '2') {
-                topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
-            } else if (invaded === true) {
-                topScoreText = topScoreText + '\nCome on Kid.\nWe have to get back\nout there and keep on fighting!'
-            }
-            typeText(scoreBoardText, topScoreText);
-        }, 18000);
-        setTimeout(function () {
-            myFadeOut(gamePlayEndArea);
-        }, 34000);
-        setTimeout(function () {
-            scoreBoardText.style.display = 'none';
-            scoreBoardText.innerText = '';
-            gamePlayEndArea.style.display = 'none';
-            playGameText.style.display = 'flex';
-            console.log('invaded ..')
-            console.log(invaded);
-            console.log('completed leve')
-            console.log(completedLevel)
-            console.log('level of play')
-            console.log(level);
-            if (invaded === true) {
-                playAgain.innerText = "Play Again";
-
-            }
-            if (completedLevel === '1') {
-                playAgain.innerText = "Continue";
-            }
-            if (completedLevel === '2') {
-                playAgain.innerText = "Play Again"
-                // completedLevel = '2';
-                localStorage.setItem('completedLevel', completedLevel);
-                // level = '2';
-                localStorage.setItem('level', level);
-            }
-            myFadeIn(playGameText);
-            myFadeIn(playAgain);
-        }, 36000);
-        setTimeout(function () {
-            myFadeIn(reboot);
-        }, 37000);
-    }
-}
-
-let updateScoreBoard = () => {
-    let newScoreBoard = [];
-    let newScore = score;
-    if (scoreBoard.length === 0) {
-        console.log('score board empty')
-        scoreBoard.push(score);
-        localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
-        return;
-    }
-    for (let i = 0; i < scoreBoard.length + 1; i++) {
-        console.log('inside for loop');
-        if (i === 5) {
-            console.log('i = 5')
-            break;
-        }
-        if (newScore > scoreBoard[i]) {
-            console.log('new score is greater than scoreboard[i}');
-            newScoreBoard.push(newScore);
-            console.log('new score board')
-            console.log(newScoreBoard);
-            newScore = scoreBoard[i];
-            console.log('new score become score[i]')
-        }
-
-        if (newScore < scoreBoard[i]) {
-            console.log('og score is greater than new')
-            console.log('og')
-            console.log(scoreBoard[i]);
-            console.log('new score')
-            console.log('new score')
-            newScoreBoard.push(scoreBoard[i]);
-        }
-
-        if ((i + 1) > scoreBoard.length) {
-            console.log('in here?')
-            newScoreBoard.push(newScore);
-            break;
-        }
-    }
-    scoreBoard = newScoreBoard;
-    localStorage.setItem('scoreBoard', JSON.stringify(scoreBoard));
-}
-
-let tieFighterInvaded = () => {
-    gamePlayEnded = true;
-    localStorage.setItem('gamePlayEnded', gamePlayEnded);
-    invaded = true;
-    localStorage.setItem('invaded', invaded);
-    displayGamePlayEndedArea();
-}
-
-let addPointsOnHit = () => {
-    score = score + 25;
-    localStorage.setItem('score', score);
-    console.log(score)
-};
-
 let fireLasers = (event) => {
     if (gamePlayEnded == true) {
         return;
     }
     if (event.code === 'Space') {
-        
+
         //LEFT LASER
         let leftLaserId = generateId()
         let leftLaserDom = createLaserDom(leftLaserId);
@@ -605,24 +470,195 @@ let fireLasers = (event) => {
     }
 }
 
-let userArrow = (event) => {
-    // if (gamePlayEnded == true) {
-    //     return;
-    // }
-    if (event.key === 'ArrowLeft') {
-        if (galacticDefenderXPosition >= 1) {
-            galacticDefenderXVelocity = -(xWingVelocity);
-            galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
-            galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
-        }
-    } else if (event.key === 'ArrowRight') {
-        if (galacticDefenderXPosition <= 93) {
-            galacticDefenderXVelocity = xWingVelocity;
-            galacticDefenderXPosition = galacticDefenderXPosition + galacticDefenderXVelocity;
-            galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
+let createTieFighterDom = (tieFighterId) => {
+    let tieFighterDom = document.createElement('img');
+    tieFighterDom.src = 'assets/tieFighter.png';
+    tieFighterDom.style.display = 'flex';
+    tieFighterDom.style.position = 'absolute';
+    tieFighterDom.id = tieFighterId;
+    tieFighterObject[tieFighterId] = {
+        tieFighterXPosition: 0,
+        tieFighterYPosition: 0,
+    }
+    gameArea.appendChild(tieFighterDom);
+    return tieFighterDom;
+}
 
+let initialTieFighterXPosition = (tieFighterDom, tieFighterId) => {
+    let tieFighterXPosition = Math.ceil(Math.random() * 93);
+    tieFighterDom.style.left = tieFighterXPosition + 'vw';
+    tieFighterObject[tieFighterId].tieFighterXPosition = tieFighterXPosition;
+}
+
+let initialTieFighterYPosition = (tieFighterDom, tieFighterId) => {
+    let tieFighterYPosition = 0;
+    tieFighterDom.style.top = tieFighterYPosition + 'vh';
+    tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
+}
+
+let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval) => {
+    if (gamePlayEnded === true) {
+        tieFighterDom.remove();
+        delete tieFighterObject[tieFighterId];
+        clearInterval(myTieFighterMoveInterval);
+        return;
+    }
+    if (tieFighterDom.style.display === 'none') {
+        tieFighterDom.remove();
+        delete tieFighterObject[tieFighterId];
+        clearInterval(myTieFighterMoveInterval);
+        return;
+    }
+    let tieFighterYPosition = tieFighterObject[tieFighterId].tieFighterYPosition + 1;
+    tieFighterDom.style.top = tieFighterYPosition + 'vh';
+    if (tieFighterYPosition >= 90) {
+        tieFighterDom.remove();
+        delete tieFighterObject[tieFighterId];
+        clearInterval(myTieFighterMoveInterval);
+        clearInterval(myTieFighterInvasionInterval);
+        tieFighterInvaded();
+        return;
+    }
+    tieFighterObject[tieFighterId].tieFighterYPosition = tieFighterYPosition;
+}
+
+let explodeTieFighter = (left, top) => {
+    let explosionDom = document.createElement('img');
+    explosionDom.src = 'assets/explosion.png'
+    explosionDom.style.display = 'flex';
+    explosionDom.style.position = 'absolute';
+    gameArea.appendChild(explosionDom);
+    explosionDom.style.left = left + 'vw';
+    explosionDom.style.top = top + 'vh';
+    return explosionDom;
+}
+
+let tieFighterInvasion = (myTieFighterInvasionInterval) => {
+
+    if (gamePlayEnded == true) {
+        return;
+    }
+
+    for (let i = 0; i < tieFighterMultiplier; i++) {
+        let tieFighterId = generateId();
+        let tieFighterDom = createTieFighterDom(tieFighterId);
+        initialTieFighterXPosition(tieFighterDom, tieFighterId);
+        initialTieFighterYPosition(tieFighterDom, tieFighterId);
+
+        let myTieFighterMoveInterval = setInterval(function () {
+            moveTieFighter(tieFighterDom, tieFighterId, myTieFighterMoveInterval, myTieFighterInvasionInterval);
+        }, tieFighterInvasionSpeedInterval);
+    }
+}
+
+let tieFighterInvaded = () => {
+    gamePlayEnded = true;
+    invaded = true;
+    invadedText;
+
+    updateScoreBoard();
+
+    displayGamePlayEndedArea(invadedFinale, invadedText);
+}
+
+
+
+
+// Score Board Stuff -- NEEDS WORK
+let printScoreBoardText = () => {
+    for (let i = 1; i < 6; i++) {
+        topScoresText = topScoresText + "\n" + (i) + ". " + scoreBoard[i] + " pts";
+        if (score > scoreBoard[i]) {
+            specialText = '\nCongratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
+        };
+    };
+    if (score > scoreBoard[1]) {
+        specialText = '\nCongratulations!\nYour Score of ' + score + ' pts\nis the new High Score!';
+    };
+    topScoresText = topScoresText + '\n' + specialText;
+    // if (completedLevel === '1') {
+    //     topScoreText = topScoreText + '\nLooks like more\nTIE Fighters are\nin enroute and\nthey need us out there!'
+    // } else if (completedLevel === '2') {
+    //     topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
+    // } else if (invaded === true) {
+        topScoresText = topScoresText + "\n\nLet's Play Again!"
+    // }
+    typeText(scoreBoardText, topScoresText);
+}
+
+let updateScoreBoard = () => {
+
+    let bump;
+
+    for (let i = 1; i < 6; i++) {
+        if (scoreBoard[i] === '- - -') {
+            scoreBoard[i] = score;
+            break;
+        }
+        if (score > scoreBoard[i]) {
+            bump = scoreBoard[i];
+            scoreBoard[i] = score;
+            score = bump;
         }
     }
+
+    setScoreBoard(scoreBoard);
+
+
+}
+
+let eraseTextHideArea = (dom) => {
+    dom.style.display = 'none';
+    dom.innerText = '';
+}
+
+let displayGamePlayEndedArea = (gamePlayEndMusic, endText) => {
+
+    handleMusic(gamePlayEndMusic, music);
+
+    myFadeIn(gamePlayEndArea);
+
+    typeText(gamePlayEndText, endText);
+
+    setTimeout(function () {
+        myFadeOut(gamePlayEndArea);
+    }, 10000);
+
+    setTimeout(function () {
+        eraseTextHideArea(gamePlayEndText);
+        let scoreText = `Score: ${score} pts`;
+        gamePlayEndArea.style.top = '30vh';
+        gamePlayEndArea.style.left = '35vw';
+        gamePlayEndArea.style.display = 'flex';
+        myFadeIn(gamePlayEndArea);
+        typeText(gamePlayScoreText, scoreText);
+        
+    }, 12000);
+
+    setTimeout(function () {
+        myFadeOut(gamePlayEndArea);
+    }, 17000);
+
+    setTimeout(function () {
+        eraseTextHideArea(gamePlayScoreText);
+        gamePlayEndArea.style.top = '12vh';
+        gamePlayEndArea.style.left = '28vw';
+        gamePlayEndArea.style.display = 'flex';
+        myFadeIn(gamePlayEndArea);
+        printScoreBoardText();
+    }, 19000);
+
+    setTimeout(function () {
+        myFadeOut(gamePlayEndArea);
+    }, 34000);
+    setTimeout(function () {
+        eraseTextHideArea(scoreBoardText)
+        myFadeIn(playGameText);
+        myFadeIn(instructionText);
+    }, 36000);
+    setTimeout(function () {
+        myFadeIn(reboot);
+    }, 39000);
 }
 
 let startGame = () => {
@@ -752,84 +788,4 @@ let playLevelTwo = () => {
 let refreshReboot = () => {
     localStorage.clear();
     window.location.reload();
-}
-
-let playIntroCrawl = () => {
-    trailerArea.style.display = 'flex'
-    trailerArea.style.flexDirection = 'column'
-    trailerArea.style.alignItems = 'center'
-    trailerArea.style.justifyContent = 'center'
-    myShrinkText(hollowStarWarsText);
-}
-
-let myFadeIn = (dom) => {
-    let opacity = 0;
-    dom.style.display = 'flex';
-    dom.style.flexDirection = 'column'
-    dom.style.alignItems = 'center'
-    dom.style.justifyContent = 'center'
-    dom.style.opacity = '0';
-    let myTimer = setInterval(function () {
-        if (opacity >= 1) {
-            dom.style.opacity = 1;
-            clearInterval(myTimer);
-        }
-        dom.style.opacity = opacity;
-        opacity += opacity + 0.1;
-    }, 50)
-};
-
-let myFadeOut = (dom) => {
-    let opacity = 1;
-    dom.style.opacity = 1;
-    let myTimer = setInterval(function () {
-        if (opacity <= 0) {
-            clearInterval(myTimer);
-            dom.style.display = 'none';
-            dom.style.opacity = 1;
-        }
-        dom.style.opacity = opacity;
-        opacity = opacity - 0.1;
-    }, 50)
-};
-
-let myShrinkText = (dom) => {
-    dom.style.display = 'flex';
-    dom.style.flexDirection = 'column';
-    dom.style.alignItems = 'center';
-    dom.style.alignContent = 'center';
-
-    let fontSize = 16;
-    let opacity = 1;
-    let myTimer = setInterval(function () {
-        if (fontSize <= 0) {
-            clearInterval(myTimer);
-            dom.style.display = 'none';
-        }
-        dom.style.fontSize = fontSize + "vw";
-        dom.style.opacity = opacity;
-        opacity = opacity - 0.002;
-        fontSize = fontSize - 0.07;
-    }, 50)
-}
-
-let typeText = (dom, str) => {
-    dom.style.display = 'flex'
-    let strB = ''
-    let i = 0;
-    let myTypeInterval = setInterval(function () {
-        if (i == (str.length)) {
-            clearInterval(myTypeInterval)
-            return;
-        }
-        strB = strB + str[i]
-        dom.innerText = strB;
-        i = i + 1;
-    }, 50)
-}
-
-let intialGalacticDefenderXPostion = () => {
-    // The x position of Galactic Defender
-    galacticDefenderXPosition = 47;
-    galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
 }
