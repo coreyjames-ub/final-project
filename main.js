@@ -92,11 +92,6 @@ let getScoreBoard = () => {
             3: '- - -',
             4: '- - -',
             5: '- - -'
-            // first: '- - -',
-            // second: '- - -',
-            // third: '- - -',
-            // forth: '- - -',
-            // fifth: '- - -'
         };
     } else {
         scoreBoard = JSON.parse(scoreBoard);
