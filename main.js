@@ -1,9 +1,9 @@
 // SET UP SOUNDS
-const foxIntro = new Audio('sounds/fox-intro.mp3');
-const starWarsTheme = new Audio('sounds/star-wars-theme.mp3');
+const foxIntro = new Audio('sounds/foxIntro.mp3');
+const starWarsTheme = new Audio('sounds/starWarsTheme.mp3');
 const imperialMarch = new Audio('sounds/imperialMarch.mp3');
-const xWingFire = new Audio('sounds/XWing-Fire.mp3');
-const tieFighterExplosion = new Audio('sounds/TIE-fighter-explode.mp3');
+const xWingFire = new Audio('sounds/xWingFire.mp3');
+const tieFighterExplosion = new Audio('sounds/tieFighterExplode.mp3');
 const invadedFinale = new Audio('sounds/invadedFinale.mp3');
 const levelOneCompleteSong = new Audio('sounds/levelOneComplete.mp3');
 const returnOfTheJedi = new Audio('sounds/returnOfTheJedi.mp3');
