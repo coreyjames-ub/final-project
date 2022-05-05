@@ -5,7 +5,7 @@ const imperialMarch = new Audio('sounds/imperialMarch.mp3');
 const xWingFire = new Audio('sounds/XWing-Fire.mp3');
 const tieFighterExplosion = new Audio('sounds/TIE-fighter-explode.mp3');
 const invadedFinale = new Audio('sounds/invadedFinale.mp3');
-const levelOneComplete = new Audio('sounds/levelOneComplete.mp3');
+const levelOneCompleteSong = new Audio('sounds/levelOneComplete.mp3');
 const returnOfTheJedi = new Audio('sounds/returnOfTheJedi.mp3');
 const ewokCelebration = new Audio('sounds/ewokCelebration.mp3');
 let music;
@@ -38,24 +38,26 @@ let playAgain = document.querySelector('#playAgain');
 let reboot = document.querySelector('#reboot');
 
 // GAME VARIABLES
+let updateTime = 'fresh';
+let frequency;
+let gamePlayTimeout;
+let gamePlayDuration;
 let gamePlayEnded = false;
 let score = 0;
 let invaded = false;
 let completedLevel = false;
 // End of Game Play Messages
 let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
-let completedLevelOneText = "* Rogue Three,\n* This is Echo Base.\n* TIE Fighters are on retreat.\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n* Return to Base."
-let completedLevelTwoText = "* Rogue Three,\n* This is Echo Base.\n* The DEATH STAR\n is destroyed!\n* All Imperial Forces are retreating.\n* We have defeated the Empire\nand defended our galaxy.\n* Return to base,\nit's time to celebrate!"
+let completedLevelOneText = "* Rogue Three,\n\n* This is Echo Base.\n\n* TIE Fighters on retreat.\n\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n\n* Return to Base."
+let completedLevelTwoText = "* Rogue Three,\n\n* This is Echo Base.\n\n* The DEATH STAR is destroyed!\nThe enemy is on retreat.\n\n* We have defeated the Empire\nand defended our galaxy."
 // Score Board Messages
 let specialText = "\nYou did alright Kid."
-let topScoresText = "Top Scores:"
 // Game Motion and TIE Fighter Creation Variables
-let laserSpeedInterval = 35;
-// let tieFighterInvasionSpeedInterval = 400;
-let tieFighterInvasionSpeedInterval = 1;
-let tieFighterInvasionCreationInterval = 4000;
-let xWingVelocity = 1.5;
-let tieFighterMultiplier = 2;
+let laserSpeedInterval;
+let tieFighterInvasionSpeedInterval;
+let tieFighterInvasionCreationInterval;
+let xWingVelocity;
+let tieFighterMultiplier;
 // The X Position and X Velocity of the Galactic Defender
 let galacticDefenderXPosition;
 let galacticDefenderXVelocity;
@@ -113,76 +115,66 @@ let setScoreBoard = (scoreBoard) => {
 // EVENT LISTENERS
 
 // A bunch of cascading time outs  -- call backs or promises would be more elegant, but I have not really mastered that yet.
-// enterSectionText.addEventListener('click', function () {
-//     myFadeOut(titleArea);
-//     setTimeout(function () {
-//         myFadeIn(introArea);
-//     }, 1000)
-//     setTimeout(function () {
-//         myFadeIn(productionArea);
-//     }, 1500);
-//     // foxIntro.play();
-//     handleMusic(foxIntro);
-//     setTimeout(function () {
-//         myFadeOut(productionArea)
-//     }, 20500);
-//     setTimeout(function () {
-//         myFadeIn(longTimeArea);
-//     }, 22000)
-//     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-//         setTimeout(function () {
-//             myFadeIn(continueButton);
-//         }, 29000)
-//         continueButton.addEventListener('click', function () {
-//             starWarsTheme.play();
-//             myFadeOut(longTimeArea);
-//             setTimeout(function () {
-//                 playIntroCrawl();
-//             }, 1000);
-//             setTimeout(function () {
-//                 myFadeOut(crawlArea);
-//             }, 84000);
-//             setTimeout(function () {
-//                 myFadeIn(playText);
-//             }, 85000);
-//             setTimeout(function () {
-//                 myFadeIn(tagLineTwo);
-//             }, 87000)
-//         });
-//     } else {
-//         setTimeout(function () {
-//             myFadeOut(longTimeArea);
-//         }, 29000)
-//         setTimeout(function () {
-//             // starWarsTheme.play();
-//             handleMusic(starWarsTheme, foxIntro);
-//             playIntroCrawl();
-//         }, 30000);
-//         setTimeout(function () {
-//             myFadeOut(crawlArea);
-//         }, 114000);
-//         setTimeout(function () {
-//             myFadeIn(playText);
-//         }, 115000);
-//         playText.style.position = 'absolute';
-//         setTimeout(function () {
-//             myFadeIn(tagLineTwo);
-//         }, 117000)
-//     }
-// });
-
-// playText.addEventListener('click', function () {
-//     myFadeOut(introArea);
-//     setTimeout(function () {
-//         myFadeIn(gameArea);
-//         myFadeIn(playGameText);
-//         myFadeIn(instructionText);
-//     }, 1000);
-// });
-
-// DEV MODE
 enterSectionText.addEventListener('click', function () {
     myFadeOut(titleArea);
+    setTimeout(function () {
+        myFadeIn(introArea);
+    }, 1000)
+    setTimeout(function () {
+        myFadeIn(productionArea);
+    }, 1500);
+    // foxIntro.play();
+    handleMusic(foxIntro);
+    setTimeout(function () {
+        myFadeOut(productionArea)
+    }, 20500);
+    setTimeout(function () {
+        myFadeIn(longTimeArea);
+    }, 22000)
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        setTimeout(function () {
+            myFadeIn(continueButton);
+        }, 29000)
+        continueButton.addEventListener('click', function () {
+            starWarsTheme.play();
+            myFadeOut(longTimeArea);
+            setTimeout(function () {
+                playIntroCrawl();
+            }, 1000);
+            setTimeout(function () {
+                myFadeOut(crawlArea);
+            }, 84000);
+            setTimeout(function () {
+                myFadeIn(playText);
+            }, 85000);
+            setTimeout(function () {
+                myFadeIn(tagLineTwo);
+            }, 87000)
+        });
+    } else {
+        setTimeout(function () {
+            myFadeOut(longTimeArea);
+        }, 29000)
+        setTimeout(function () {
+            // starWarsTheme.play();
+            handleMusic(starWarsTheme, foxIntro);
+            playIntroCrawl();
+        }, 30000);
+        setTimeout(function () {
+            myFadeOut(crawlArea);
+        }, 114000);
+        setTimeout(function () {
+            myFadeIn(playText);
+        }, 115000);
+        playText.style.position = 'absolute';
+        setTimeout(function () {
+            myFadeIn(tagLineTwo);
+        }, 117000)
+    }
+});
+
+playText.addEventListener('click', function () {
+    myFadeOut(introArea);
     setTimeout(function () {
         myFadeIn(gameArea);
         myFadeIn(playGameText);
@@ -190,7 +182,24 @@ enterSectionText.addEventListener('click', function () {
     }, 1000);
 });
 
+// DEV MODE
+// enterSectionText.addEventListener('click', function () {
+//     myFadeOut(titleArea);
+//     setTimeout(function () {
+//         myFadeIn(gameArea);
+//         myFadeIn(playGameText);
+//         myFadeIn(instructionText);
+//     }, 1000);
+// });
+
 playGameText.addEventListener('click', function () {
+    gamePlayEnded = false;
+    invaded = false;
+    completedLevel = false;
+    updateTime = 'fresh';
+    setGamePlayDuration();
+    setGamePlaySpeed();
+    setUpdateFrequency();
     intialGalacticDefenderXPostion();
     myFadeOut(playGameText);
     myFadeOut(instructionText);
@@ -201,6 +210,12 @@ playGameText.addEventListener('click', function () {
     let myTieFighterInvasionInterval = setInterval(function () {
         tieFighterInvasion(myTieFighterInvasionInterval)
     }, tieFighterInvasionCreationInterval);
+    let gamePlayTimeout = setTimeout(function () {
+        levelCompleted(gamePlayTimeout);
+    }, gamePlayDuration);
+    let gamePlayUpdateInterval = setInterval(function () {
+        upDateGameSpeed(gamePlayUpdateInterval);
+    }, frequency);
 });
 
 reboot.addEventListener('click', function () {
@@ -208,6 +223,100 @@ reboot.addEventListener('click', function () {
 })
 
 // HELPER FUNCTIONS
+
+let setGamePlayDuration = () => {
+    if (level === 'levelOne') {
+        gamePlayDuration = 186000;
+    } else if (level === 'levelTwo') {
+        gamePlayDuration = 303000;
+    }
+}
+
+let upDateGameSpeed = (gamePlayUpdateInterval) => {
+
+    if (gamePlayEnded === true) {
+        clearInterval(gamePlayUpdateInterval)
+        clearTimeout(gamePlayTimeout);
+        return;
+    }
+
+    // run a function here
+    setGamePlaySpeed();
+
+}
+
+let setGamePlaySpeed = () => {
+
+    if (level === 'levelOne') {
+
+        if (updateTime === 'fresh') {
+
+            laserSpeedInterval = 35;
+            tieFighterInvasionSpeedInterval = 350;
+            tieFighterInvasionCreationInterval = 3500;
+            xWingVelocity = 1.25;
+            tieFighterMultiplier = 3;
+
+            updateTime = 'first';
+
+        } else if (updateTime === 'first') {
+
+            laserSpeedInterval = 25;
+            tieFighterInvasionSpeedInterval = 320;
+            tieFighterInvasionCreationInterval = 3200;
+            xWingVelocity = 2;
+            tieFighterMultiplier = 4;
+
+            updateTime = 'second';
+
+        } else {
+
+            laserSpeedInterval = 20;
+            tieFighterInvasionSpeedInterval = 300;
+            tieFighterInvasionCreationInterval = 3000;
+            xWingVelocity = 3;
+            tieFighterMultiplier = 5;
+
+        }
+
+    } else {
+
+        if (updateTime === 'fresh') {
+
+            laserSpeedInterval = 15;
+            tieFighterInvasionSpeedInterval = 290;
+            tieFighterInvasionCreationInterval = 2900;
+            xWingVelocity = 3.25;
+            tieFighterMultiplier = 5;
+
+            updateTime = 'first';
+
+        } else if (updateTime === 'first') {
+
+            laserSpeedInterval = 10;
+            tieFighterInvasionSpeedInterval = 280;
+            tieFighterInvasionCreationInterval = 2800;
+            xWingVelocity = 3.5;
+            tieFighterMultiplier = 6;
+
+            updateTime = 'second';
+
+        } else {
+
+            laserSpeedInterval = 8;
+            tieFighterInvasionSpeedInterval = 270;
+            tieFighterInvasionCreationInterval = 2700;
+            xWingVelocity = 4;
+            tieFighterMultiplier = 7;
+
+        }
+
+    }
+}
+
+let setUpdateFrequency = () => {
+    frequency = Math.round(gamePlayDuration / 3);
+}
 
 let handleMusic = (playMusic, pauseMusic) => {
     if (pauseMusic != null) {
@@ -321,7 +430,7 @@ let determineGamePlayMusic = (pauseMusic) => {
         pauseMusic.currentTime = 0;
     }
     // we need to set up getters and setters
-    playMusic = imperialMarch;
+    // playMusic = imperialMarch;
     setTimeout(function () {
         playMusic.play();
     }, 100)
@@ -502,6 +611,8 @@ let moveTieFighter = (tieFighterDom, tieFighterId, myTieFighterMoveInterval, myT
         tieFighterDom.remove();
         delete tieFighterObject[tieFighterId];
         clearInterval(myTieFighterMoveInterval);
+        clearInterval(myTieFighterInvasionInterval);
+        clearTimeout(gamePlayTimeout);
         return;
     }
     if (tieFighterDom.style.display === 'none') {
@@ -562,44 +673,80 @@ let tieFighterInvaded = () => {
     displayGamePlayEndedArea(invadedFinale, invadedText);
 }
 
+let levelCompleted = (gamePlayTimeout) => {
+
+    // CLEAR THE TIME OUT HERE
+    clearTimeout(gamePlayTimeout);
+
+    gamePlayEnded = true;
+    completedLevel = true;
+
+    let text;
+    let endMusic;
+
+    if (level === 'levelOne') {
+        text = completedLevelOneText;
+        endMusic = levelOneCompleteSong;
+        level = 'levelTwo';
+        setLevel(level);
+    } else {
+        text = completedLevelTwoText;
+        endMusic = ewokCelebration;
+        level = 'levelOne';
+        setLevel(level);
+    };
+
+    updateScoreBoard();
+
+    displayGamePlayEndedArea(endMusic, text);
+};
+
 
 
 
 // Score Board Stuff -- NEEDS WORK
 let printScoreBoardText = () => {
+    let topScoresText = "Top Scores:"
     for (let i = 1; i < 6; i++) {
         topScoresText = topScoresText + "\n" + (i) + ". " + scoreBoard[i] + " pts";
         if (scoreBoard[i] === score) {
-            specialText = '\nCongratulations!' + "\n" + "Your Score of " + score + " pts" + "\n" + "made the Leader Board.";
+            specialText = "\nYour Score of " + score + " pts\nmade the Leader Board.";
         };
     };
     if (scoreBoard[1] === score) {
-        specialText = '\nCongratulations!\nYou set a new High Score!';
+        specialText = '\nCongratulations, new High Score!';
     };
     topScoresText = topScoresText + '\n' + specialText;
-    // if (completedLevel === '1') {
-    //     topScoreText = topScoreText + '\nLooks like more\nTIE Fighters are\nin enroute and\nthey need us out there!'
-    // } else if (completedLevel === '2') {
-    //     topScoreText = topScoreText + '\nNice job Kid.\nYou are a true\nGalactic Defender.'
-    // } else if (invaded === true) {
-        topScoresText = topScoresText + "\n\nLet's Play Again!"
-    // }
+    let gameOverText;
+    if (invaded === true){
+        gameOverText = "\n\nWe've been Invaded!\n\nLet's Play Again!"
+    } else {
+        if (level === 'levelTwo') {
+            gameOverText = "\n\nYou completed Level One\n\nLet's Play Level Two!"
+        } else {
+            gameOverText =  "\n\nYou beat the Game!\n\nPlay again for a new High Score!"
+        }
+    }
+    topScoresText = topScoresText + gameOverText
+    
     typeText(scoreBoardText, topScoresText);
+
 }
 
 let updateScoreBoard = () => {
 
+    let tempScore = score;
     let bump;
 
     for (let i = 1; i < 6; i++) {
         if (scoreBoard[i] === '- - -') {
-            scoreBoard[i] = score;
+            scoreBoard[i] = tempScore;
             break;
         }
-        if (score > scoreBoard[i]) {
+        if (tempScore > scoreBoard[i]) {
             bump = scoreBoard[i];
-            scoreBoard[i] = score;
-            score = bump;
+            scoreBoard[i] = tempScore;
+            tempScore = bump;
         }
     }
 
@@ -633,7 +780,7 @@ let displayGamePlayEndedArea = (gamePlayEndMusic, endText) => {
         gamePlayEndArea.style.display = 'flex';
         myFadeIn(gamePlayEndArea);
         typeText(gamePlayScoreText, scoreText);
-        
+
     }, 12000);
 
     setTimeout(function () {
@@ -642,8 +789,8 @@ let displayGamePlayEndedArea = (gamePlayEndMusic, endText) => {
 
     setTimeout(function () {
         eraseTextHideArea(gamePlayScoreText);
-        gamePlayEndArea.style.top = '12vh';
-        gamePlayEndArea.style.left = '28vw';
+        gamePlayEndArea.style.top = '8vh';
+        gamePlayEndArea.style.left = '20vw';
         gamePlayEndArea.style.display = 'flex';
         myFadeIn(gamePlayEndArea);
         printScoreBoardText();
@@ -652,138 +799,16 @@ let displayGamePlayEndedArea = (gamePlayEndMusic, endText) => {
     setTimeout(function () {
         myFadeOut(gamePlayEndArea);
     }, 34000);
+
     setTimeout(function () {
         eraseTextHideArea(scoreBoardText)
         myFadeIn(playGameText);
         myFadeIn(instructionText);
     }, 36000);
+
     setTimeout(function () {
         myFadeIn(reboot);
     }, 38000);
-}
-
-let startGame = () => {
-    score = 0;
-    localStorage.setItem('score', 0);
-    gamePlayEnded = false;
-    localStorage.setItem('gamePlayEnded', false);
-    invaded = false;
-    localStorage.setItem('invaded', false);
-    getScore();
-    getGamePlayEnded();
-    getInvaded();
-    getScoreBoard();
-    getLevel();
-    getCompletedLevel();
-    if (level === '2') {
-        returnOfTheJedi.play();
-    } else if (level === '1') {
-        imperialMarch.play()
-    }
-    // The x position of Galactic Defender
-    galacticDefenderXPosition = 0;
-    galacticDefender.style.left = `${galacticDefenderXPosition}vw`;
-}
-
-let playLevelOne = () => {
-    if (level === '1') {
-        let myLevelOneTimeOutOne = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelOneTimeOutOne);
-                displayGamePlayEndedArea();
-                return;
-            }
-            console.log('inside level 1 faster')
-            laserSpeedInterval = 20;
-            tieFighterInvasionSpeedInterval = 280;
-            tieFighterInvasionCreationInterval = 2800;
-            xWingVelocity = 3;
-            tieFighterMultiplier = 3;
-        }, 63000);
-        let myLevelOneTimeOutTwo = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelOneTimeOutTwo);
-                displayGamePlayEndedArea();
-                return;
-            }
-            console.log('inside level 1 fastest')
-            laserSpeedInterval = 15;
-            tieFighterInvasionSpeedInterval = 270;
-            tieFighterInvasionCreationInterval = 2700;
-            xWingVelocity = 3.5;
-            tieFighterMultiplier = 3;
-        }, 125000);
-        let myLevelOneTimeOutThree = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelOneTimeOutThree)
-                displayGamePlayEndedArea();
-                return;
-            }
-            console.log('almost done with level 1')
-            gamePlayEnded = true;
-            localStorage.setItem('gamePlayEnded', gamePlayEnded);
-            invaded = false;
-            localStorage.setItem('invaded', invaded);
-            completedLevel = '1';
-            localStorage.setItem('completedLevel', completedLevel);
-            level = '2';
-            localStorage.setItem('level', level);
-            displayGamePlayEndedArea();
-        }, 187000)
-    } else {
-        return;
-    }
-}
-
-let playLevelTwo = () => {
-    if (level === '2') {
-        let myLevelTwoTimeOutOne = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelTwoTimeOutOne)
-                displayGamePlayEndedArea();
-                return;
-            }
-            console.log('inside lvl 2');
-            laserSpeedInterval = 10;
-            tieFighterInvasionSpeedInterval = 260;
-            tieFighterInvasionCreationInterval = 2600;
-            xWingVelocity = 3.5;
-            tieFighterMultiplier = 4;
-        }, 90000);
-        let myLevelTwoTimeOutTwo = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelTwoTimeOutTwo);
-                displayGamePlayEndedArea();
-                return;
-            }
-            console.log('inside lvl 2 faster');
-            laserSpeedInterval = 8;
-            tieFighterInvasionSpeedInterval = 250;
-            tieFighterInvasionCreationInterval = 2500;
-            xWingVelocity = 4;
-            tieFighterMultiplier = 4;
-        }, 180000);
-        let myLevelTwoTimeOutThree = setTimeout(function () {
-            if (invaded === true || gamePlayEnded === true) {
-                clearTimeout(myLevelTwoTimeOutThree);
-                displayGamePlayEndedArea();
-                return;
-            }
-            console.log('almost done with lvl 2');
-            gamePlayEnded = true;
-            localStorage.setItem('gamePlayEnded', gamePlayEnded);
-            invaded = false;
-            localStorage.setItem('invaded', invaded);
-            completedLevel = '2';
-            localStorage.setItem('completedLevel', completedLevel);
-            level = '2';
-            localStorage.setItem('level', level);
-            displayGamePlayEndedArea();
-        }, 303000)
-    } else {
-        return;
-    }
-
 }
 
 let refreshReboot = () => {

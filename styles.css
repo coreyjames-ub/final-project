@@ -226,8 +226,8 @@ body {
   justify-content: flex-start;
   box-shadow: 0 12px 50px 0 skyblue, 0 -10px 500px 0 goldenrod;
   background-color: rgba(0, 0, 0, 0.89);
-  top: 15vh;
-  left: 25vw;
+  top: 10vh;
+  left: 21vw;
   z-index: 2;
 }
 
