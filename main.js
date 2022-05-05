@@ -48,8 +48,8 @@ let invaded = false;
 let completedLevel = false;
 // End of Game Play Messages
 let invadedText = "* Rogue Three,\n\n* This is Echo Base.\n\n* We've been Invaded.\n\n* Repeat,\n\n* We've been Invaded."
-let completedLevelOneText = "* Rogue Three,\n\n* This is Echo Base.\n\n* TIE Fighters on retreat.\n\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n\n* Return to Base."
-let completedLevelTwoText = "* Rogue Three,\n\n* This is Echo Base.\n\n* The DEATH STAR is destroyed!\nThe enemy is on retreat.\n\n* We have defeated the Empire\nand defended our galaxy."
+let completedLevelOneText = "* Rogue Three,\n\n* This is Echo Base.\n\n* TIE Fighters are on retreat.\n\n* Reserve X-Wing Fighters\nare in route to replace\nyour Squadron\n\n* Return to Base."
+let completedLevelTwoText = "* Rogue Three,\n\n* This is Echo Base.\n\n* The DEATH STAR is destroyed!\nThe enemy is on retreat.\n\n* We have defeated the Empire\nand defended our galaxy.\n\n*Return to Base to CELEBRATE!"
 // Score Board Messages
 let specialText = "\nYou did alright Kid."
 // Game Motion and TIE Fighter Creation Variables
@@ -193,13 +193,17 @@ playText.addEventListener('click', function () {
 // });
 
 playGameText.addEventListener('click', function () {
+    level = getLevel();
     gamePlayEnded = false;
+    if (invaded === true){
+        score = 0;
+    }
     invaded = false;
     completedLevel = false;
     updateTime = 'fresh';
-    setGamePlayDuration();
+    gamePlayDuration = setGamePlayDuration();
+    frequency = setUpdateFrequency();
     setGamePlaySpeed();
-    setUpdateFrequency();
     intialGalacticDefenderXPostion();
     myFadeOut(playGameText);
     myFadeOut(instructionText);
@@ -210,7 +214,7 @@ playGameText.addEventListener('click', function () {
     let myTieFighterInvasionInterval = setInterval(function () {
         tieFighterInvasion(myTieFighterInvasionInterval)
     }, tieFighterInvasionCreationInterval);
-    let gamePlayTimeout = setTimeout(function () {
+    gamePlayTimeout = setTimeout(function () {
         levelCompleted(gamePlayTimeout);
     }, gamePlayDuration);
     let gamePlayUpdateInterval = setInterval(function () {
@@ -226,17 +230,16 @@ reboot.addEventListener('click', function () {
 
 let setGamePlayDuration = () => {
     if (level === 'levelOne') {
-        gamePlayDuration = 186000;
+        return gamePlayDuration = 186000;
     } else if (level === 'levelTwo') {
-        gamePlayDuration = 303000;
+        return gamePlayDuration = 303000;
     }
 }
 
 let upDateGameSpeed = (gamePlayUpdateInterval) => {
 
     if (gamePlayEnded === true) {
-        clearInterval(gamePlayUpdateInterval)
-        clearTimeout(gamePlayTimeout);
+        clearInterval(gamePlayUpdateInterval);
         return;
     }
 
@@ -279,7 +282,7 @@ let setGamePlaySpeed = () => {
 
         }
 
-    } else {
+    } else if (level === 'levelTwo') {
 
         if (updateTime === 'fresh') {
 
@@ -316,6 +319,7 @@ let setGamePlaySpeed = () => {
 
 let setUpdateFrequency = () => {
     frequency = Math.round(gamePlayDuration / 3);
+    return frequency;
 }
 
 let handleMusic = (playMusic, pauseMusic) => {
@@ -438,7 +442,7 @@ let determineGamePlayMusic = (pauseMusic) => {
 };
 
 let userArrow = (event) => {
-    if (gamePlayEnded == true) {
+    if (gamePlayEnded === true) {
         return;
     }
     if (event.key === 'ArrowLeft') {
@@ -510,7 +514,7 @@ let addPointsOnHit = () => {
 
 let moveLaser = (laserDom, laserId, myLaserInterval) => {
 
-    if (gamePlayEnded == true) {
+    if (gamePlayEnded === true) {
         laserDom.remove();
         delete laserObject[laserId];
         clearInterval(myLaserInterval);
@@ -551,7 +555,7 @@ let moveLaser = (laserDom, laserId, myLaserInterval) => {
 }
 
 let fireLasers = (event) => {
-    if (gamePlayEnded == true) {
+    if (gamePlayEnded === true) {
         return;
     }
     if (event.code === 'Space') {
@@ -647,7 +651,7 @@ let explodeTieFighter = (left, top) => {
 
 let tieFighterInvasion = (myTieFighterInvasionInterval) => {
 
-    if (gamePlayEnded == true) {
+    if (gamePlayEnded === true) {
         return;
     }
 
@@ -790,7 +794,7 @@ let displayGamePlayEndedArea = (gamePlayEndMusic, endText) => {
     setTimeout(function () {
         eraseTextHideArea(gamePlayScoreText);
         gamePlayEndArea.style.top = '8vh';
-        gamePlayEndArea.style.left = '20vw';
+        gamePlayEndArea.style.left = '17vw';
         gamePlayEndArea.style.display = 'flex';
         myFadeIn(gamePlayEndArea);
         printScoreBoardText();
